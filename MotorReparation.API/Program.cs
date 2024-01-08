@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using MotorReparation.Application.Contracts;
+using MotorReparation.Application.Persistence;
+using MotorReparation.Application.Services;
 using MotorReparation.Domain;
 using MotorReparation.Infrastructure;
 using MotorReparation.Infrastructure.Persistence;
+using MotorReparation.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +32,14 @@ builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
 {
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 }));
+
+//repo
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+//service
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IBasketService, BasketService>();
 
 var app = builder.Build();
 

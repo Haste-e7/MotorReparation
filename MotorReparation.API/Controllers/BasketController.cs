@@ -5,18 +5,18 @@ namespace MotorReparation.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class TicketController : ControllerBase
+    public class BasketController : ControllerBase
     {
-        private readonly ITicketService _ticketService;
-        public TicketController(ITicketService ticketService) 
+        private readonly IBasketService _BasketService;
+        public BasketController(IBasketService BasketService)
         {
-            _ticketService = ticketService;
+            _BasketService = BasketService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTickets()
+        public async Task<IActionResult> GetAllBaskets()
         {
-            var result = await _ticketService.GetAllTicketsAsync();
+            var result = await _BasketService.GetAllBasketsAsync();
             if (result == null)
             {
                 return NotFound();
@@ -25,9 +25,9 @@ namespace MotorReparation.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTicketById(int id)
+        public async Task<IActionResult> GetBasketById(int id)
         {
-            var result = await _ticketService.GetTicketByIdAsync(id);
+            var result = await _BasketService.GetBasketByIdAsync(id);
             if (result == null)
             {
                 return NotFound();

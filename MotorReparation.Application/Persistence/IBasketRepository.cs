@@ -2,8 +2,8 @@
 
 namespace MotorReparation.Application.Persistence
 {
-    public interface ITicketRepository : IAsyncRepository<Ticket>
+    public interface IBasketRepository : IAsyncRepository<Basket>
     {
-
     }
 }
+
