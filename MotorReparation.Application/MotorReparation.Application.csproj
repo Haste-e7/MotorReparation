@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MotorReparation.Domain\MotorReparation.Domain.csproj" />
-    <ProjectReference Include="..\MotorReparation.Infrastructure\MotorReparation.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

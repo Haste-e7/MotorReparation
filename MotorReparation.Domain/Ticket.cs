@@ -7,5 +7,6 @@
         public string? Status { get; set; }
         public string? TicketType { get; set; }
         public int AssignedBay { get; set; }
+        public ICollection<BasketItem>? BasketItems { get; set; }
     }
 }

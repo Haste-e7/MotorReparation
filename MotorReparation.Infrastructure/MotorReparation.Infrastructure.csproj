@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MotorReparation.Application\MotorReparation.Application.csproj" />
     <ProjectReference Include="..\MotorReparation.Domain\MotorReparation.Domain.csproj" />
   </ItemGroup>
 

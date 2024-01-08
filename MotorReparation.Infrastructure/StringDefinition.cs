@@ -10,5 +10,7 @@
         public const string StatusInProcess = "Processing";
         public const string StatusDone = "Done";
 
+        public const string TypeRepair = "Repair";
+        public const string TypeQuickLube = "QuickLube";
     }
 }
