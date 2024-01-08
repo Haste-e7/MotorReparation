@@ -23,7 +23,7 @@ namespace MotorReparation.Application.Services
         {
 
             var basket = await _basketRepository.GetByIdAsync(id);
-            var basketItems = await _basketItemRepository.GetAsync(bi => bi.BasketId == id);
+            var basketItems = await _basketItemRepository.GetAsync(bi => bi.BasketId == id, includeProperties: bi => bi.Ticket);
             basket.BasketItems = basketItems.ToList();
 
             return basket;
