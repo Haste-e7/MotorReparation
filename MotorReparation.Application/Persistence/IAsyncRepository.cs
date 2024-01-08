@@ -12,9 +12,9 @@ namespace MotorReparation.Application.Persistence
                                         string includeString = null,
                                         bool disableTracking = true);
         Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null,
-                                       Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                       List<Expression<Func<T, object>>> includes = null,
-                                       bool disableTracking = true);
+                                        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                                        bool disableTracking = true,
+                                        params Expression<Func<T, object>>[] includeProperties);
         Task<T> GetByIdAsync(int id);
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);

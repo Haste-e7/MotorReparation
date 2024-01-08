@@ -7,16 +7,16 @@ namespace MotorReparation.API.Controllers
     [Route("api/v1/[controller]")]
     public class BasketController : ControllerBase
     {
-        private readonly IBasketService _BasketService;
-        public BasketController(IBasketService BasketService)
+        private readonly IBasketService _basketService;
+        public BasketController(IBasketService basketService)
         {
-            _BasketService = BasketService;
+            _basketService = basketService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllBaskets()
         {
-            var result = await _BasketService.GetAllBasketsAsync();
+            var result = await _basketService.GetAllBasketsAsync();
             if (result == null)
             {
                 return NotFound();
@@ -27,7 +27,7 @@ namespace MotorReparation.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBasketById(int id)
         {
-            var result = await _BasketService.GetBasketByIdAsync(id);
+            var result = await _basketService.GetBasketByIdAsync(id);
             if (result == null)
             {
                 return NotFound();

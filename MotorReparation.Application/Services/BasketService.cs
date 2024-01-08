@@ -7,9 +7,11 @@ namespace MotorReparation.Application.Services
     public class BasketService : IBasketService
     {
         private readonly IBasketRepository _basketRepository;
-        public BasketService(IBasketRepository basketRepository) 
+        private readonly IBasketItemRepository _basketItemRepository;
+        public BasketService(IBasketRepository basketRepository, IBasketItemRepository basketItemRepository) 
         { 
             _basketRepository = basketRepository;
+            _basketItemRepository = basketItemRepository;
         }
 
         public async Task<IReadOnlyList<Basket>> GetAllBasketsAsync()
@@ -19,7 +21,12 @@ namespace MotorReparation.Application.Services
 
         public async Task<Basket> GetBasketByIdAsync(int id)
         {
-            return await _basketRepository.GetByIdAsync(id);
+
+            var basket = await _basketRepository.GetByIdAsync(id);
+            var basketItems = await _basketItemRepository.GetAsync(bi => bi.BasketId == id);
+            basket.BasketItems = basketItems.ToList();
+
+            return basket;
         }
 
         public async Task<Basket> CreateBasketAsync(string userId)

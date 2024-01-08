@@ -36,10 +36,12 @@ builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
 //repo
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.AddScoped<IBasketItemRepository, BasketItemRepository>();
 
 //service
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
+builder.Services.AddScoped<IBasketItemService, BasketItemService>();
 
 var app = builder.Build();
 
