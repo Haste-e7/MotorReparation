@@ -54,16 +54,15 @@ namespace MotorReparation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tickets",
+                name: "Jobs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Status = table.Column<string>(type: "text", nullable: true),
-                    TicketType = table.Column<string>(type: "text", nullable: true),
-                    AssignedBay = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<double>(type: "double precision", nullable: false),
+                    JobType = table.Column<string>(type: "text", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
@@ -71,7 +70,7 @@ namespace MotorReparation.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tickets", x => x.Id);
+                    table.PrimaryKey("PK_Jobs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,13 +202,17 @@ namespace MotorReparation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BasketItems",
+                name: "Tickets",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BasketId = table.Column<int>(type: "integer", nullable: false),
-                    TicketId = table.Column<int>(type: "integer", nullable: false),
+                    JobId = table.Column<int>(type: "integer", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    AssignedBay = table.Column<int>(type: "integer", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -218,17 +221,17 @@ namespace MotorReparation.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BasketItems", x => x.Id);
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BasketItems_Baskets_BasketId",
+                        name: "FK_Tickets_Baskets_BasketId",
                         column: x => x.BasketId,
                         principalTable: "Baskets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BasketItems_Tickets_TicketId",
-                        column: x => x.TicketId,
-                        principalTable: "Tickets",
+                        name: "FK_Tickets_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -271,20 +274,20 @@ namespace MotorReparation.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_BasketItems_BasketId",
-                table: "BasketItems",
-                column: "BasketId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BasketItems_TicketId",
-                table: "BasketItems",
-                column: "TicketId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Baskets_CustomerId",
                 table: "Baskets",
                 column: "CustomerId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_BasketId",
+                table: "Tickets",
+                column: "BasketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_JobId",
+                table: "Tickets",
+                column: "JobId");
         }
 
         /// <inheritdoc />
@@ -306,7 +309,7 @@ namespace MotorReparation.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BasketItems");
+                name: "Tickets");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -315,7 +318,7 @@ namespace MotorReparation.Infrastructure.Migrations
                 name: "Baskets");
 
             migrationBuilder.DropTable(
-                name: "Tickets");
+                name: "Jobs");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

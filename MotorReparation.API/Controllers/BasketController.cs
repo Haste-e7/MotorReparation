@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MotorReparation.Application.Contracts;
+using MotorReparation.Application.Contracts.Services;
 
 namespace MotorReparation.API.Controllers
 {

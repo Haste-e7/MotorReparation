@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotorReparation.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotorReparation.Client", "MotorReparation.Client\MotorReparation.Client.csproj", "{128855BF-E94A-4B47-9791-3CFB48BE73D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotorReparation.Models", "MotorReparation.Models\MotorReparation.Models.csproj", "{A5A0B532-ED63-4674-B4C1-BFF6AEBB8103}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotorReparation.Models", "MotorReparation.Models\MotorReparation.Models.csproj", "{A5A0B532-ED63-4674-B4C1-BFF6AEBB8103}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿using MotorReparation.Application.Persistence;
+﻿using MotorReparation.Application.Contracts.Persistence;
 using MotorReparation.Domain;
 
 namespace MotorReparation.Infrastructure.Repositories

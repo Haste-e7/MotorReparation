@@ -1,5 +1,5 @@
-﻿using MotorReparation.Application.Contracts;
-using MotorReparation.Application.Persistence;
+﻿using MotorReparation.Application.Contracts.Persistence;
+using MotorReparation.Application.Contracts.Services;
 using MotorReparation.Domain;
 
 namespace MotorReparation.Application.Services
@@ -7,11 +7,11 @@ namespace MotorReparation.Application.Services
     public class BasketService : IBasketService
     {
         private readonly IBasketRepository _basketRepository;
-        private readonly IBasketItemRepository _basketItemRepository;
-        public BasketService(IBasketRepository basketRepository, IBasketItemRepository basketItemRepository) 
+        private readonly ITicketRepository _ticketRepository;
+        public BasketService(IBasketRepository basketRepository, ITicketRepository TicketRepository) 
         { 
             _basketRepository = basketRepository;
-            _basketItemRepository = basketItemRepository;
+            _ticketRepository = TicketRepository;
         }
 
         public async Task<IReadOnlyList<Basket>> GetAllBasketsAsync()
@@ -23,30 +23,24 @@ namespace MotorReparation.Application.Services
         {
 
             var basket = await _basketRepository.GetByIdAsync(id);
-            var basketItems = await _basketItemRepository.GetAsync(bi => bi.BasketId == id, includeProperties: bi => bi.Ticket);
-            basket.BasketItems = basketItems.ToList();
+            var Tickets = await _ticketRepository.GetAsync(t => t.BasketId == id, includeProperties: t => t.Job);
+            basket.Tickets = Tickets.ToList();
 
             return basket;
         }
 
-        public async Task<Basket> CreateBasketAsync(string userId)
+        public async Task<Basket> CreateBasketAsync(Basket basket)
         {
-
-            var basket = new Basket()
-            {
-                CustomerId = userId,
-            };
-
             return await _basketRepository.AddAsync(basket);
         }
 
-        public async Task<Basket> UpdateBasketAsync(string userId)
+        public async Task<Basket> UpdateBasketAsync(Basket basket)
         {
 
             throw new NotImplementedException();
         }
 
-        public async Task<Basket> DeleteBasketAsync(string userId)
+        public async Task<Basket> DeleteBasketAsync(int id)
         {
             throw new NotImplementedException();
         }

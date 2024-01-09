@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MotorReparation.Domain;
-using System.Net.Sockets;
 
 namespace MotorReparation.Infrastructure.Persistence
 {
@@ -10,7 +9,8 @@ namespace MotorReparation.Infrastructure.Persistence
             UserManager<AppUser> userManager, 
             RoleManager<IdentityRole> _roleManager)
         {
-            if ( !(userManager.Users.Any() && context.Tickets.Any() && context.Roles.Any(x => x.Name == StringDefinition.Role_Admin)) )
+            if ( !(userManager.Users.Any() && context.Jobs.Any() 
+                && context.Roles.Any(x => x.Name == StringDefinition.Role_Admin)) )
             {
                 var users = new List<AppUser>
                 {
@@ -53,57 +53,71 @@ namespace MotorReparation.Infrastructure.Persistence
                 {
                     Id = 1,
                     CustomerId = "1",
-                    BasketItems = new List<BasketItem>
+                    Tickets = new List<Ticket>
                     {
-                        new BasketItem
+                        new Ticket
                         {
+                            Id=1,
                             BasketId = 1,
-                            TicketId = 1,
+                            JobId = 1,
+                            Title = "Quick repair",
+                            Description = "Quick repair sth",
                             Quantity = 1,
+                            AssignedBay = 1,
+                            Status = StringDefinition.StatusDone,
                         },
-                        new BasketItem
+                        new Ticket
                         {
-                            BasketId = 2,
-                            TicketId = 2,
+                            Id=2,
+                            BasketId = 1,
+                            JobId = 2,
+                            Title = "Lengthy repair",
+                            Description = "Lengthy Job",
                             Quantity = 1,
+                            Status = StringDefinition.StatusInProcess,
                         },
-                        new BasketItem
+                        new Ticket
                         {
-                            BasketId = 3,
-                            TicketId = 3,
+                            Id=3,
+                            BasketId = 1,
+                            JobId = 3,
+                            Title = "Lengthy repair",
+                            Description = "Lengthy Job",
                             Quantity = 1,
+                            Status = StringDefinition.StatusInProcess,
                         }
                     }
                 };
 
-                var tickets = new List<Ticket>
+                var Jobs = new List<Job>
                 {
-                    new Ticket
+                    new Job
                     {
+                        Id = 1,
                         Title = "Change oil",
                         Description = "Change new oil",
-                        Status = StringDefinition.StatusPending,
-                        TicketType = StringDefinition.TypeQuickLube,
-                        AssignedBay = 1
+                        JobType = StringDefinition.TypeQuickLube,
+                        Price = 200,
+
                     },
-                    new Ticket
+                    new Job
                     {
+                        Id = 2,
                         Title = "Change engine",
                         Description = "Change new engine",
-                        Status = StringDefinition.StatusDone,
-                        TicketType = StringDefinition.TypeRepair,
-                        AssignedBay = 1
+                        JobType = StringDefinition.TypeRepair,
+                        Price = 150,
                     },
-                    new Ticket
+                    new Job
                     {
+                        Id = 3,
                         Title = "Fix door",
-                        Description = "Fix door",
-                        Status = StringDefinition.StatusInProcess,
-                        TicketType = StringDefinition.TypeRepair,
-                        AssignedBay = 2
+                        Description = "Fix front door",
+                        JobType = StringDefinition.TypeRepair,
+                        Price = 100,
                     }
                 };
-                await context.AddRangeAsync(tickets);
+                await context.AddRangeAsync(Jobs);
                 await context.AddRangeAsync(basket);
 
                 await context.SaveChangesAsync();

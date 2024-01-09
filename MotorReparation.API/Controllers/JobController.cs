@@ -5,18 +5,18 @@ namespace MotorReparation.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TicketController: ControllerBase
+    public class JobController : ControllerBase
     {
-        private readonly ITicketService _ticketService;
-        public TicketController(ITicketService TicketService)
+        private readonly IJobService _jobService;
+        public JobController(IJobService JobService) 
         {
-            _ticketService = TicketService;
+            _jobService = JobService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTickets()
+        public async Task<IActionResult> GetAllJobs()
         {
-            var result = await _ticketService.GetAllTicketsAsync();
+            var result = await _jobService.GetAllJobsAsync();
             if (result == null)
             {
                 return NotFound();
@@ -25,9 +25,9 @@ namespace MotorReparation.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAllTicketsByBasketIdAsync(int id)
+        public async Task<IActionResult> GetJobById(int id)
         {
-            var result = await _ticketService.GetAllTicketsByBasketIdAsync(id);
+            var result = await _jobService.GetJobByIdAsync(id);
             if (result == null)
             {
                 return NotFound();

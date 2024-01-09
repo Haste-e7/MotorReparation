@@ -3,11 +3,10 @@ using MotorReparation.Domain;
 
 namespace MotorReparation.Infrastructure.Repositories
 {
-    public class BasketRepository : RepositoryBase<Basket>, IBasketRepository
+    public class JobRepository : RepositoryBase<Job>, IJobRepository
     {
-        public BasketRepository(MotorReparationDbContext dbContext) : base(dbContext)
+        public JobRepository(MotorReparationDbContext dbContext) : base(dbContext)
         {
         }
-
     }
 }

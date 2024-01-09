@@ -10,8 +10,8 @@ namespace MotorReparation.Infrastructure
         {
         }
 
+        public DbSet<Job> Jobs { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<Basket> Baskets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -22,17 +22,17 @@ namespace MotorReparation.Infrastructure
                 .HasOne(b => b.Customer)
                 .WithOne(u => u.Basket)
                 .HasForeignKey<Basket>(b => b.CustomerId);
+            /*
+                builder.Entity<Ticket>(b =>
+                {
+                    b.HasOne(bi => bi.Basket)
+                        .WithMany(b => b.BasketItems)
+                        .HasForeignKey(bi => bi.BasketId);
 
-            builder.Entity<BasketItem>(b =>
-            {
-                b.HasOne(bi => bi.Basket)
-                    .WithMany(b => b.BasketItems)
-                    .HasForeignKey(bi => bi.BasketId);
-
-                b.HasOne(bi => bi.Ticket)
-                    .WithMany(t => t.BasketItems)
-                    .HasForeignKey(bi => bi.TicketId);
-            });
+                    b.HasOne(bi => bi.Ticket)
+                        .WithMany(t => t.BasketItems)
+                        .HasForeignKey(bi => bi.TicketId);
+                });*/
         }
     }
 }

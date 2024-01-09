@@ -7,5 +7,13 @@
         public DateTime? CreatedDate { get; set; }
         public  string? LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set;}
+
+        public EntityBase()
+        {
+            CreatedDate = DateTime.UtcNow;
+            LastModifiedDate = DateTime.UtcNow;
+            CreatedBy = "1";
+            LastModifiedBy = "1";
+        }
     }
 }

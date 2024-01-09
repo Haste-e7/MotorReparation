@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MotorReparation.API.Helper;
-using MotorReparation.Application.Contracts;
-using MotorReparation.Application.Persistence;
+using MotorReparation.Application.Contracts.Persistence;
+using MotorReparation.Application.Contracts.Services;
 using MotorReparation.Application.Services;
 using MotorReparation.Domain;
 using MotorReparation.Infrastructure;
@@ -35,11 +35,6 @@ builder.Services.AddDbContext<MotorReparationDbContext>(options =>
     string connStr = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseNpgsql(connStr);
 });
-
-/*//SQL database
-builder.Services.AddDbContextPool<MotorReparationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MssqlConnection"))
-);*/
 
 builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
 {
@@ -75,12 +70,12 @@ builder.Services.AddAuthentication(opt =>
 //repo
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
-builder.Services.AddScoped<IBasketItemRepository, BasketItemRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
 
 //service
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
-builder.Services.AddScoped<IBasketItemService, BasketItemService>();
+builder.Services.AddScoped<IJobService, JobService>();
 
 var app = builder.Build();
 

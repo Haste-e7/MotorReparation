@@ -1,6 +1,6 @@
 ﻿using MotorReparation.Domain;
 
-namespace MotorReparation.Application.Persistence
+namespace MotorReparation.Application.Contracts.Persistence
 {
     public interface ITicketRepository : IAsyncRepository<Ticket>
     {

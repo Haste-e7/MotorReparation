@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MotorReparation.Infrastructure.Migrations
 {
     [DbContext(typeof(MotorReparationDbContext))]
-    [Migration("20240107075138__1")]
+    [Migration("20240109110834__1")]
     partial class _1
     {
         /// <inheritdoc />
@@ -258,7 +258,7 @@ namespace MotorReparation.Infrastructure.Migrations
                     b.ToTable("Baskets");
                 });
 
-            modelBuilder.Entity("MotorReparation.Domain.BasketItem", b =>
+            modelBuilder.Entity("MotorReparation.Domain.Job", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -266,14 +266,17 @@ namespace MotorReparation.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BasketId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobType")
+                        .HasColumnType("text");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -281,19 +284,15 @@ namespace MotorReparation.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("TicketId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BasketId");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("BasketItems");
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("MotorReparation.Domain.Ticket", b =>
@@ -307,6 +306,9 @@ namespace MotorReparation.Infrastructure.Migrations
                     b.Property<int>("AssignedBay")
                         .HasColumnType("integer");
 
+                    b.Property<int>("BasketId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -314,7 +316,11 @@ namespace MotorReparation.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
@@ -322,16 +328,22 @@ namespace MotorReparation.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("text");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("TicketType")
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("JobId");
 
                     b.ToTable("Tickets");
                 });
@@ -396,23 +408,23 @@ namespace MotorReparation.Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("MotorReparation.Domain.BasketItem", b =>
+            modelBuilder.Entity("MotorReparation.Domain.Ticket", b =>
                 {
                     b.HasOne("MotorReparation.Domain.Basket", "Basket")
-                        .WithMany("BasketItems")
+                        .WithMany("Tickets")
                         .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MotorReparation.Domain.Ticket", "Ticket")
-                        .WithMany("BasketItems")
-                        .HasForeignKey("TicketId")
+                    b.HasOne("MotorReparation.Domain.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Basket");
 
-                    b.Navigation("Ticket");
+                    b.Navigation("Job");
                 });
 
             modelBuilder.Entity("MotorReparation.Domain.AppUser", b =>
@@ -422,12 +434,7 @@ namespace MotorReparation.Infrastructure.Migrations
 
             modelBuilder.Entity("MotorReparation.Domain.Basket", b =>
                 {
-                    b.Navigation("BasketItems");
-                });
-
-            modelBuilder.Entity("MotorReparation.Domain.Ticket", b =>
-                {
-                    b.Navigation("BasketItems");
+                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }

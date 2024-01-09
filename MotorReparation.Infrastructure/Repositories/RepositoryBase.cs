@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MotorReparation.Application.Persistence;
+using MotorReparation.Application.Contracts.Persistence;
 using MotorReparation.Domain;
 using System.Linq.Expressions;
 

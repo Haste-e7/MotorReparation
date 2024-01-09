@@ -1,0 +1,53 @@
+﻿@page "/ticket"
+@using MotorReparation.Client.Services.IServices
+
+<h3>TicketList</h3>
+
+@if(Tickets == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    <h4 class="card-title text-info">Tickets</h4>
+    <RadzenGrid AllowFiltering="true"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                FilterMode="FilterMode.Advanced" AllowPaging="true" PageSize="4"
+                AllowSorting="true" Data="@Tickets" TItem="Ticket" ColumnWidth="200px">
+        <Columns>
+            <RadzenGridColumn TItem="Ticket" Property="JobId" Title="JobId" />
+            <RadzenGridColumn TItem="Ticket" Property="Title" Title="Title" />
+            <RadzenGridColumn TItem="Ticket" Property="Description" Title="Descriptione" />
+            <RadzenGridColumn TItem="Ticket" Property="Status" Title="Status" />
+            <RadzenGridColumn TItem="Ticket" Property="AssignedBay" Title="AssignedBay" />
+            <RadzenGridColumn TItem="Ticket" Property="Quantity" Title="Quantity" />
+            <RadzenGridColumn TItem="Ticket" Property="CreatedDate" Title="CreatedDate">
+                <Template Context="data">
+                    @String.Format("{0:d}", data.CreatedDate)
+                </Template>
+            </RadzenGridColumn>
+
+            <RadzenGridColumn TItem="Ticket" Property="Id" Title="Action">
+                <Template Context="data">
+                    <NavLink class="btn btn-primary" href="@($"hotel-room-order/details/{data.Id}")">Edit</NavLink>
+                    <NavLink class="btn btn-danger" href="#">Delete</NavLink>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+
+}
+
+@code {
+    [Inject]
+    public ITicketService TicketService { get; set; }
+    public IEnumerable<Ticket> Tickets { get; set; } = new List<Ticket>();
+    private bool IsLoading { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        Tickets = await TicketService.GetAllTickets();
+        IsLoading = false;
+    }
+}

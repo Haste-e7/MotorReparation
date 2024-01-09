@@ -1,12 +1,15 @@
 ﻿namespace MotorReparation.Domain
 {
-    public class Ticket: EntityBase
+    public class Ticket : EntityBase
     {
-        public string? Title { get; set; }
-        public string? Description { get; set; }
-        public string? Status { get; set; }
-        public string? TicketType { get; set; }
-        public int AssignedBay { get; set; }
-        public ICollection<BasketItem>? BasketItems { get; set; }
+        public int BasketId { get; set; }
+        public Basket? Basket { get; set; }
+        public int JobId { get; set; }
+        public Job? Job { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public int AssignedBay { get; set; } //quicklube only
+        public int Quantity { get; set; } = 1;
     }
 }

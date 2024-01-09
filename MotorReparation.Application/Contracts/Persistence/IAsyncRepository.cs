@@ -1,7 +1,7 @@
 ﻿using MotorReparation.Domain;
 using System.Linq.Expressions;
 
-namespace MotorReparation.Application.Persistence
+namespace MotorReparation.Application.Contracts.Persistence
 {
     public interface IAsyncRepository<T> where T : EntityBase
     {
