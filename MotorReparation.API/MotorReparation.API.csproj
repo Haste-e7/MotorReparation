@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MotorReparation.Application\MotorReparation.Application.csproj" />
     <ProjectReference Include="..\MotorReparation.Infrastructure\MotorReparation.Infrastructure.csproj" />
+    <ProjectReference Include="..\MotorReparation.Models\MotorReparation.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace MotorReparation.API.DTOs
+﻿namespace MotorReparation.Models.DTOs
 {
     public class AuthenticationResponseDTO
     {

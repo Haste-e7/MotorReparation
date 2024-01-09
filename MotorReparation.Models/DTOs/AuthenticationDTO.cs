@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MotorReparation.API.DTOs
+namespace MotorReparation.Models.DTOs
 {
     public class AuthenticationDTO
     {

@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MotorReparation.API.DTOs;
 using MotorReparation.API.Helper;
 using MotorReparation.Domain;
 using MotorReparation.Infrastructure;
+using MotorReparation.Models.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -14,7 +14,7 @@ using System.Text;
 namespace MotorReparation.API.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class AccountController : ControllerBase
     {
         private readonly SignInManager<AppUser> _signInManager;

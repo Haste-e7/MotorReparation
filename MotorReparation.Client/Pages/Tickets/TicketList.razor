@@ -1,0 +1,28 @@
+﻿@page "/ticket"
+@using MotorReparation.Client.Services.IServices
+@using MotorReparation.Domain
+
+<h3>TicketList</h3>
+
+@if(Tickets == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    foreach(var ticket in Tickets)
+    {
+        <h3>@ticket.Title</h3>
+    }
+}
+
+@code {
+    [Inject]
+    public ITicketService TicketService { get; set; }
+    public IEnumerable<Ticket> Tickets { get; set; } = new List<Ticket>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Tickets = await TicketService.GetAllTickets();
+    }
+}

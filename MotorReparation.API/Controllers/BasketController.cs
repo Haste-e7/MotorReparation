@@ -4,7 +4,7 @@ using MotorReparation.Application.Contracts;
 namespace MotorReparation.API.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     public class BasketController : ControllerBase
     {
         private readonly IBasketService _basketService;
