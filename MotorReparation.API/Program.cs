@@ -36,6 +36,11 @@ builder.Services.AddDbContext<MotorReparationDbContext>(options =>
     options.UseNpgsql(connStr);
 });
 
+/*//SQL database
+builder.Services.AddDbContextPool<MotorReparationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MssqlConnection"))
+);*/
+
 builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
 {
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
@@ -51,22 +56,21 @@ builder.Services.AddAuthentication(opt =>
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateAudience = true,
-                    ValidateIssuer = true,
-                    ValidAudience = apiSettings.ValidAudience,
-                    ValidIssuer = apiSettings.ValidIssuer,
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+}).AddJwtBearer(x =>
+  {
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidAudience = apiSettings.ValidAudience,
+        ValidIssuer = apiSettings.ValidIssuer,
+        ClockSkew = TimeSpan.Zero
+    };
+  });
 
 //repo
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
