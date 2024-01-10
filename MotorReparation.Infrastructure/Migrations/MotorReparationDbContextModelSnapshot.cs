@@ -252,7 +252,7 @@ namespace MotorReparation.Infrastructure.Migrations
                     b.HasIndex("CustomerId")
                         .IsUnique();
 
-                    b.ToTable("Baskets");
+                    b.ToTable("Baskets", (string)null);
                 });
 
             modelBuilder.Entity("MotorReparation.Domain.Job", b =>
@@ -289,7 +289,7 @@ namespace MotorReparation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("Jobs", (string)null);
                 });
 
             modelBuilder.Entity("MotorReparation.Domain.Ticket", b =>
@@ -342,7 +342,7 @@ namespace MotorReparation.Infrastructure.Migrations
 
                     b.HasIndex("JobId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

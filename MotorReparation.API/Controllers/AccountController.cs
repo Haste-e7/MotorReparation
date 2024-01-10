@@ -7,6 +7,7 @@ using MotorReparation.API.Helper;
 using MotorReparation.Domain;
 using MotorReparation.Infrastructure;
 using MotorReparation.Models.DTOs;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -139,7 +140,7 @@ namespace MotorReparation.API.Controllers
                 new Claim(ClaimTypes.Name,user.Email),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim("Id",user.Id),
-
+                new Claim("BasketId",JsonConvert.SerializeObject(user.BasketId)),
             };
             var roles = await _userManager.GetRolesAsync(await _userManager.FindByEmailAsync(user.Email));
 

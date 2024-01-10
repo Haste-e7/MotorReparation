@@ -49,7 +49,7 @@ namespace MotorReparation.Infrastructure.Persistence
                 var admin = context.Users.FirstOrDefault(u => u.Email == "admin@test.com");
                 userManager.AddToRoleAsync(admin, StringDefinition.Role_Admin).GetAwaiter().GetResult();
 
-                var basket = new Basket()
+                /*var basket = new Basket()
                 {
                     Id = 1,
                     CustomerId = "1",
@@ -87,7 +87,7 @@ namespace MotorReparation.Infrastructure.Persistence
                             Status = StringDefinition.StatusInProcess,
                         }
                     }
-                };
+                };*/
 
                 var Jobs = new List<Job>
                 {
@@ -118,7 +118,7 @@ namespace MotorReparation.Infrastructure.Persistence
                     }
                 };
                 await context.AddRangeAsync(Jobs);
-                await context.AddRangeAsync(basket);
+                //await context.AddRangeAsync(basket);
 
                 await context.SaveChangesAsync();
             }

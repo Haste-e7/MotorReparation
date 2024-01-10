@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MotorReparation.Application.Contracts.Persistence;
 using MotorReparation.Application.Contracts.Services;
+using MotorReparation.Domain;
 
 namespace MotorReparation.API.Controllers
 {
@@ -8,9 +10,12 @@ namespace MotorReparation.API.Controllers
     public class BasketController : ControllerBase
     {
         private readonly IBasketService _basketService;
-        public BasketController(IBasketService basketService)
+        private readonly IBasketRepository _basketRepository;
+        public BasketController(IBasketService basketService, IBasketRepository basketRepository)
         {
             _basketService = basketService;
+            _basketRepository = basketRepository;
+
         }
 
         [HttpGet]
@@ -34,7 +39,18 @@ namespace MotorReparation.API.Controllers
                 return NotFound();
             }
             return Ok(result);*/
-throw new NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBasket(Basket basket)
+        {
+            var result = await _basketRepository.AddAsync(basket);
+            if (result < 1)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }
