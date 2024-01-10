@@ -9,7 +9,14 @@
 }
 else
 {
-    <h4 class="card-title text-info">Tickets</h4>
+    <div class="row mt-4">
+        <div class="col-8">
+            <h4 class="card-title text-info">Ticket</h4>
+        </div>
+        <div class="col-3 offset-1">
+            <NavLink href="ticket/create" class="btn btn-info form-control">Add New Ticket</NavLink>
+        </div>
+    </div>
     <RadzenGrid AllowFiltering="true"
                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                 FilterMode="FilterMode.Advanced" AllowPaging="true" PageSize="4"
@@ -29,7 +36,7 @@ else
 
             <RadzenGridColumn TItem="Ticket" Property="Id" Title="Action">
                 <Template Context="data">
-                    <NavLink class="btn btn-primary" href="@($"hotel-room-order/details/{data.Id}")">Edit</NavLink>
+                    <NavLink class="btn btn-primary" href="@($"ticket/details/{data.Id}")">Edit</NavLink>
                     <NavLink class="btn btn-danger" href="#">Delete</NavLink>
                 </Template>
             </RadzenGridColumn>

@@ -1,0 +1,56 @@
+﻿@page "/ticket/create"
+@page "/ticket/edit/{Id:int}"
+@inject ITicketService TicketService
+
+<div class="row mt-2 mb-5">
+    <h3 class="card-title text-info mb-3 ml-3">Create Ticket</h3>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <EditForm Model="Ticket" OnSubmit="HandleTicketUpsert">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <InputText @bind-Value="Ticket.Title" class="form-control"></InputText>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <InputText @bind-Value="Ticket.Description" class="form-control"></InputText>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <InputText @bind-Value="Ticket.Status" class="form-control"></InputText> @* dropdown *@
+                    </div>
+                    <div class="form-group">
+                        <label>CreatedDate</label>
+                        <p class="form-control">@Ticket.CreatedDate</p> @* auto gen *@
+                    </div>
+                    <div class="form-group">
+                        <label>CreatedBy</label>
+                        <p class="form-control">@Ticket.CreatedBy</p>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary">Create new ticket</button>
+                        <NavLink href="ticket" class="btn btn-secondary">Back to Index</NavLink>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+    private Ticket Ticket { get; set; } = new Ticket();
+    private async Task HandleTicketUpsert()
+    {
+        if(Id == null)
+        {
+            var result = await TicketService.CreateTicket(Ticket);
+        }
+        else
+        {
+            var result = await TicketService.UpdateTicket(Ticket);
+        }
+    }
+}

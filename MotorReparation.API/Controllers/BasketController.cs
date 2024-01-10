@@ -24,15 +24,17 @@ namespace MotorReparation.API.Controllers
             return Ok(result);
         }
 
+
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBasketById(int id)
+        public async Task<IActionResult> GetAllTicketsByBasketIdAsync(int id)
         {
-            var result = await _basketService.GetBasketByIdAsync(id);
+/*            var result = await _basketService.GetAllTicketsByBasketIdAsync(id);
             if (result == null)
             {
                 return NotFound();
             }
-            return Ok(result);
+            return Ok(result);*/
+throw new NotImplementedException();
         }
     }
 }

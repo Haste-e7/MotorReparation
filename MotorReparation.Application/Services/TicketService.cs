@@ -11,7 +11,7 @@ namespace MotorReparation.Application.Services
         {
             _ticketRepository = TicketRepository;
         }
-        public async Task<Ticket> CreateTicketAsync(Ticket Ticket)
+        public async Task<int> CreateTicketAsync(Ticket Ticket)
         {
             return await _ticketRepository.AddAsync(Ticket);
         }

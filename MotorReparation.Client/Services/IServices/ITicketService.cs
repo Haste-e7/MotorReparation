@@ -6,5 +6,7 @@ namespace MotorReparation.Client.Services.IServices
     {
         Task<IEnumerable<Ticket>> GetAllTickets();
         Task<Ticket> GetTicketDetails(int id);
+        Task<string> CreateTicket(Ticket ticket);
+        Task<string> UpdateTicket(Ticket ticket);
     }
 }

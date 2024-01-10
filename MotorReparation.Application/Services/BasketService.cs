@@ -29,18 +29,18 @@ namespace MotorReparation.Application.Services
             return basket;
         }
 
-        public async Task<Basket> CreateBasketAsync(Basket basket)
+        public async Task<int> CreateBasketAsync(Basket basket)
         {
             return await _basketRepository.AddAsync(basket);
         }
 
-        public async Task<Basket> UpdateBasketAsync(Basket basket)
+        public async Task<int> UpdateBasketAsync(Basket basket)
         {
 
             throw new NotImplementedException();
         }
 
-        public async Task<Basket> DeleteBasketAsync(int id)
+        public async Task<int> DeleteBasketAsync(int id)
         {
             throw new NotImplementedException();
         }

@@ -1,21 +1,32 @@
-﻿<h3>DisplayTicket</h3>
+﻿@page "/ticket/details/{Id:int}"
+@inject ITicketService TicketService
 
-    <div class="col-md-3 mb-2">
-        <a href="#">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">
-                        @Ticket.Title
-                    </h5>
-                    <p class="card-text">
-                        <b>@Ticket.Description</b>
-                    </p>
-                </div>
-            </div>
-        </a>
+<h3>Display Ticket</h3>
+
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">@Ticket.Title</h5>
+        <p class="card-text">@Ticket.Description</p>
     </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">@Ticket.Status</li>
+        <li class="list-group-item">@Ticket.CreatedBy</li>
+        <li class="list-group-item">A third item</li>
+    </ul>
+    <div class="card-body">
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+    </div>
+</div>
 
 @code {
     [Parameter]
-    public Ticket Ticket { get; set; }
+    public int Id { get; set; }
+    public Ticket Ticket { get; set; } = new Ticket();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Ticket = await TicketService.GetTicketDetails(Id);
+    }
 }
