@@ -52,7 +52,7 @@ namespace MotorReparation.Client.Services
         public async Task<string> CreateTicket(Ticket ticket)
         {
             var payload = JsonContent.Create(ticket);
-            var response = await _client.PostAsync($"api/ticket", payload);
+            var response = await _client.PostAsJsonAsync($"api/appuser/CreateUserTicket?userId={ticket.CreatedBy}", ticket);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -70,7 +70,7 @@ namespace MotorReparation.Client.Services
         public async Task<string> UpdateTicket(Ticket ticket)
         {
             var payload = JsonContent.Create(ticket);
-            var response = await _client.PutAsync($"api/ticket/{ticket.Id}", payload);
+            var response = await _client.PutAsJsonAsync($"api/ticket/{ticket.Id}", ticket);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
