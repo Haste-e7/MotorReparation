@@ -1,6 +1,8 @@
 ﻿@page "/ticket/create"
 @page "/ticket/edit/{Id:int}"
 @inject ITicketService TicketService
+@inject ILocalStorageService localStorage
+@inject IJobService JobService
 
 <div class="row mt-2 mb-5">
     <h3 class="card-title text-info mb-3 ml-3">Create Ticket</h3>
@@ -8,6 +10,13 @@
         <div class="card">
             <div class="card-body">
                 <EditForm Model="Ticket" OnSubmit="HandleTicketUpsert">
+                    @if(Id != null)
+                    {
+                        <div class="form-group">
+                            <label>Id</label>
+                            <p class="form-control">@Id</p>
+                        </div>
+                    }
                     <div class="form-group">
                         <label>Name</label>
                         <InputText @bind-Value="Ticket.Title" class="form-control"></InputText>
@@ -17,8 +26,36 @@
                         <InputText @bind-Value="Ticket.Description" class="form-control"></InputText>
                     </div>
                     <div class="form-group">
+                        <label>JobId</label>
+                        <InputSelect @bind-Value="Ticket.JobId" class="form-control">
+                            @foreach (var job in jobList)
+                            {
+                                if (job.Id == 1)
+                                {
+                                    <option value="@job.Id" selected>@job.Title</option>
+                                }
+                                else
+                                {
+                                    <option value="@job.Id">@job.Title</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="form-group">
                         <label>Status</label>
-                        <InputText @bind-Value="Ticket.Status" class="form-control"></InputText> @* dropdown *@
+                        <InputSelect @bind-Value="Ticket.Status" class="form-control">
+                            <option value="@SD.StatusPending" selected>@SD.StatusPending</option>
+                            <option value="@SD.StatusInProcess">@SD.StatusInProcess</option>
+                            <option value="@SD.StatusDone">@SD.StatusDone</option>
+                        </InputSelect>
+                    </div>
+                    <div class="form-group">
+                        <label>AssignedBay</label>
+                        <InputNumber @bind-Value="Ticket.AssignedBay" class="form-control"></InputNumber>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <InputNumber @bind-Value="Ticket.Quantity" class="form-control"></InputNumber>
                     </div>
                     <div class="form-group">
                         <label>CreatedDate</label>
@@ -27,6 +64,14 @@
                     <div class="form-group">
                         <label>CreatedBy</label>
                         <p class="form-control">@Ticket.CreatedBy</p>
+                    </div>
+                    <div class="form-group">
+                        <label>LastModifiedDate</label>
+                        <p class="form-control">@Ticket.LastModifiedDate</p> @* auto gen *@
+                    </div>
+                    <div class="form-group">
+                        <label>LastModifiedBy</label>
+                        <p class="form-control">@Ticket.LastModifiedBy</p>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary">Create new ticket</button>
@@ -42,14 +87,27 @@
     [Parameter]
     public int? Id { get; set; }
     private Ticket Ticket { get; set; } = new Ticket();
+    private IEnumerable<Job> jobList { get; set; } = new List<Job>();
+    protected override async Task OnInitializedAsync()
+    {
+        jobList = await JobService.GetAllJobs();
+    }
     private async Task HandleTicketUpsert()
     {
+        var userDTO = await localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails);
         if(Id == null)
         {
+            Ticket.CreatedDate= DateTime.UtcNow;
+            Ticket.CreatedBy = userDTO.Id;
+            Ticket.LastModifiedDate = DateTime.UtcNow;
+            Ticket.LastModifiedBy = userDTO.Id;
+            Ticket.BasketId = userDTO.BasketId;
             var result = await TicketService.CreateTicket(Ticket);
         }
         else
         {
+            Ticket.LastModifiedDate = DateTime.UtcNow;
+            Ticket.LastModifiedBy = userDTO.Id;
             var result = await TicketService.UpdateTicket(Ticket);
         }
     }

@@ -15,9 +15,11 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https:/
 
 //services
 builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddBlazoredLocalStorage();
+
 
 await builder.Build().RunAsync();

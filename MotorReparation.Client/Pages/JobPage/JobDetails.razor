@@ -1,0 +1,32 @@
+﻿@page "/job/details/{Id:int}"
+@inject IJobService JobService
+
+<h3>Display Job</h3>
+
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">@Job.Title</h5>
+        <p class="card-text">@Job.Description</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">@Job.Price</li>
+        <li class="list-group-item">@Job.CreatedBy</li>
+        <li class="list-group-item">A third item</li>
+    </ul>
+    <div class="card-body">
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    public Job Job { get; set; } = new Job();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Job = await JobService.GetJobDetails(Id);
+    }
+}

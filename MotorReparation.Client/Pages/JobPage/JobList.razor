@@ -1,0 +1,54 @@
+﻿@page "/job"
+@using MotorReparation.Client.Services.IServices
+
+<h3>Job List</h3>
+
+@if (Jobs == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    <div class="row mt-4">
+        <div class="col-8">
+            <h4 class="card-title text-info">Job</h4>
+        </div>
+        <div class="col-3 offset-1">
+            <NavLink href="job/create" class="btn btn-info form-control">Add New Job</NavLink>
+        </div>
+    </div>
+    <RadzenGrid AllowFiltering="true"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                FilterMode="FilterMode.Advanced" AllowPaging="true" PageSize="4"
+                AllowSorting="true" Data="@Jobs" TItem="Job" ColumnWidth="200px">
+        <Columns>
+            <RadzenGridColumn TItem="Job" Property="Id" Title="JobId" />
+            <RadzenGridColumn TItem="Job" Property="Title" Title="Title" />
+            <RadzenGridColumn TItem="Job" Property="Description" Title="Descriptione" />
+            <RadzenGridColumn TItem="Job" Property="Price" Title="Price" />
+            <RadzenGridColumn TItem="Job" Property="JobType" Title="JobType" />
+
+            <RadzenGridColumn TItem="Job" Property="Id" Title="Action">
+                <Template Context="data">
+                    <NavLink class="btn btn-primary" href="@($"job/details/{data.Id}")">Details</NavLink>
+                    <NavLink class="btn btn-danger" href="#">Delete</NavLink>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+
+}
+
+@code {
+    [Inject]
+    public IJobService JobService { get; set; }
+    public IEnumerable<Job> Jobs { get; set; } = new List<Job>();
+    private bool IsLoading { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        Jobs = await JobService.GetAllJobs();
+        IsLoading = false;
+    }
+}

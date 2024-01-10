@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace MotorReparation.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class AppUserController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;

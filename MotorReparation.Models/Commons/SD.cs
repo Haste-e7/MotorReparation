@@ -24,5 +24,12 @@ namespace MotorReparation.Models.Commons
         public const string Status_CheckedOut_Completed = "CheckedOut";
         public const string Status_NoShow = "NoShow";
         public const string Status_Cancelled = "Cancelled";
+
+        public const string StatusPending = "Pending";
+        public const string StatusInProcess = "Processing";
+        public const string StatusDone = "Done";
+
+        public const string TypeRepair = "Repair";
+        public const string TypeQuickLube = "QuickLube";
     }
 }
