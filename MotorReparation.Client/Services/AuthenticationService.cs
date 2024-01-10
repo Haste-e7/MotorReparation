@@ -19,7 +19,6 @@ namespace MotorReparation.Client.Services
         {
             _client = client;
             _authStateProvider = authStateProvider;
-            ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
             _localStorage = localStorage;
         }
 
@@ -49,6 +48,7 @@ namespace MotorReparation.Client.Services
         {
             await _localStorage.RemoveItemAsync(SD.Local_Token);
             await _localStorage.RemoveItemAsync(SD.Local_UserDetails);
+            ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
             _client.DefaultRequestHeaders.Authorization = null;
         }
 

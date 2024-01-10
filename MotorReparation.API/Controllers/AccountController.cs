@@ -112,7 +112,8 @@ namespace MotorReparation.API.Controllers
                         Name = user.DisplayName,
                         Id = user.Id,
                         Email = user.Email,
-                        PhoneNo = user.PhoneNumber
+                        PhoneNo = user.PhoneNumber,
+                        BasketId = user.BasketId
                     }
                 });
             }

@@ -20,7 +20,6 @@ namespace MotorReparation.Infrastructure.Persistence
                         DisplayName = "Admin",
                         UserName = "admin",
                         Email = "admin@test.com",
-                        BasketId = 1,
                     },
                     new AppUser
                     {
