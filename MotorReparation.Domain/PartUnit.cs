@@ -6,7 +6,7 @@ namespace MotorReparation.Domain
     {
         [ForeignKey("Ticket")]
         public int TicketId { get; set; }
-        public Ticket Ticket { get; set; }
+        public Ticket? Ticket { get; set; }
         public int PartId { get; set; } //Part table
         public double Price { get; set; }
         public double Quantity { get; set; }

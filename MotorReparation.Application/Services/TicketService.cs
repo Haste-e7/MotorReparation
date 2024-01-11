@@ -44,7 +44,10 @@ namespace MotorReparation.Application.Services
 
         public async Task<Ticket> GetTicketByIdAsync(int id)
         {
-            return await _ticketRepository.GetByIdAsync(id);
+            var result = await _ticketRepository.GetAsync(t=>t.Id == id,null,true, t => t.LaborUnits, t => t.PartUnits);
+            var x = result.ToList()[0];
+            return x;
         }
     }
 }
+  

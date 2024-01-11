@@ -6,10 +6,10 @@ namespace MotorReparation.Domain
     {
         [ForeignKey("Ticket")]
         public int TicketId { get; set; }
-        public Ticket Ticket { get; set; }
+        public Ticket? Ticket { get; set; }
         [ForeignKey("Employee")]
         public string EmployeeId { get; set; }
-        public AppUser Employee { get; set; }
+        public AppUser? Employee { get; set; }
         public double LaborRate { get; set; }
         public double Hour { get; set; }
     }

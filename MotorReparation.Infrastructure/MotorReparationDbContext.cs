@@ -13,6 +13,8 @@ namespace MotorReparation.Infrastructure
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Basket> Baskets { get; set; }
+        public DbSet<LaborUnit> LaborUnits { get; set; }
+        public DbSet<PartUnit> PartUnits { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

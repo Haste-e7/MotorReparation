@@ -11,5 +11,8 @@
         public string Status { get; set; }
         public int AssignedBay { get; set; } //quicklube only
         public int Quantity { get; set; } = 1;
+        public ICollection<LaborUnit> LaborUnits { get; set; } = new List<LaborUnit>();
+        public ICollection<PartUnit> PartUnits { get; set; } = new List<PartUnit>();
+
     }
 }
