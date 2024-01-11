@@ -30,7 +30,7 @@ else
 
             <RadzenGridColumn TItem="Job" Property="Id" Title="Action">
                 <Template Context="data">
-                    <NavLink class="btn btn-primary" href="@($"job/details/{data.Id}")">Details</NavLink>
+                    <NavLink class="btn btn-primary" href="@($"job/edit/{data.Id}")">Details</NavLink>
                     <NavLink class="btn btn-danger" href="#">Delete</NavLink>
                 </Template>
             </RadzenGridColumn>

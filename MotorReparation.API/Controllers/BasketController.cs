@@ -2,20 +2,22 @@
 using MotorReparation.Application.Contracts.Persistence;
 using MotorReparation.Application.Contracts.Services;
 using MotorReparation.Domain;
+using MotorReparation.Models.Commons;
 
 namespace MotorReparation.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class BasketController : ControllerBase
     {
         private readonly IBasketService _basketService;
         private readonly IBasketRepository _basketRepository;
-        public BasketController(IBasketService basketService, IBasketRepository basketRepository)
+        private readonly ITicketRepository _ticketRepository;
+        public BasketController(IBasketService basketService, IBasketRepository basketRepository, ITicketRepository ticketRepository)
         {
             _basketService = basketService;
             _basketRepository = basketRepository;
-
+            _ticketRepository  = ticketRepository;
         }
 
         [HttpGet]
@@ -30,16 +32,16 @@ namespace MotorReparation.API.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAllTicketsByBasketIdAsync(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetAllTicketsByBasketIdAsync(int basketId)
         {
-/*            var result = await _basketService.GetAllTicketsByBasketIdAsync(id);
+            var result = await _ticketRepository.GetAsync(t => t.BasketId == basketId, includeProperties: t=>t.Job);
             if (result == null)
             {
                 return NotFound();
             }
-            return Ok(result);*/
-            throw new NotImplementedException();
+            return Ok(result);
+
         }
 
         [HttpPost]

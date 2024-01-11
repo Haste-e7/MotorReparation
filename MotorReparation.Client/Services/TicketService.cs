@@ -31,9 +31,9 @@ namespace MotorReparation.Client.Services
 
         }
 
-        public async Task<IEnumerable<Ticket>> GetAllTickets()
+        public async Task<IEnumerable<Ticket>> GetAllTickets(int basketId)
         {
-            var response = await _client.GetAsync($"api/ticket");
+            var response = await _client.GetAsync($"api/Ticket?basketId={basketId}");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -48,10 +48,24 @@ namespace MotorReparation.Client.Services
             }
 
         }
+        public async Task<IEnumerable<Ticket>> GetAllTicketsByBasketId(int basketId)
+        {
+            var response = await _client.GetAsync($"api/basket/GetAllTicketsByBasketIdAsync?basketId={basketId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
 
+                return JsonConvert.DeserializeObject<IEnumerable<Ticket>>(content); ;
+            }
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var errorModel = JsonConvert.DeserializeObject<ErrorModel>(content);
+                throw new Exception(errorModel.ErrorMessage);
+            }
+        }
         public async Task<string> CreateTicket(Ticket ticket)
         {
-            var payload = JsonContent.Create(ticket);
             var response = await _client.PostAsJsonAsync($"api/appuser/CreateUserTicket?userId={ticket.CreatedBy}", ticket);
             if (response.IsSuccessStatusCode)
             {

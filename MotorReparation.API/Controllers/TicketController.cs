@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MotorReparation.Application.Contracts.Persistence;
 using MotorReparation.Application.Contracts.Services;
 using MotorReparation.Application.Services;
 using MotorReparation.Domain;
 using MotorReparation.Infrastructure.Repositories;
+using MotorReparation.Models.Commons;
 
 namespace MotorReparation.API.Controllers
 {
@@ -20,12 +22,16 @@ namespace MotorReparation.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTickets()
+        public async Task<IActionResult> GetAllTickets(int basketId)
         {
-            var result = await _ticketService.GetAllTicketsAsync();
-            if (result == null)
+            var result = new List<Ticket>();    
+            if (User.IsInRole(SD.Role_Admin))
             {
-                return NotFound();
+                result = (List<Ticket>)await _ticketService.GetAllTicketsAsync();
+            }
+            else if (User.IsInRole(SD.Role_Customer) && basketId != null)
+            {
+                result = (List<Ticket>)await _ticketRepository.GetAsync(t => t.BasketId == basketId, includeProperties: t => t.Job);
             }
             return Ok(result);
         }

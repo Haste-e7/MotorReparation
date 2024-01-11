@@ -1,4 +1,5 @@
-﻿using MotorReparation.Application.Contracts.Persistence;
+﻿using Microsoft.AspNetCore.Identity;
+using MotorReparation.Application.Contracts.Persistence;
 using MotorReparation.Application.Contracts.Services;
 using MotorReparation.Domain;
 
@@ -7,9 +8,13 @@ namespace MotorReparation.Application.Services
     public class TicketService : ITicketService
     {
         private readonly ITicketRepository _ticketRepository;
-        public TicketService(ITicketRepository TicketRepository)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
+        public TicketService(ITicketRepository TicketRepository, RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager)
         {
+            _roleManager = roleManager;
             _ticketRepository = TicketRepository;
+            _userManager = userManager;
         }
         public async Task<int> CreateTicketAsync(Ticket Ticket)
         {

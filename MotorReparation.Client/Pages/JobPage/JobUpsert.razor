@@ -1,11 +1,12 @@
-﻿@page "/ticket/create"
-@page "/ticket/edit/{Id:int}"
+﻿@page "/job/create"
+@page "/job/edit/{Id:int}"
 @using Microsoft.AspNetCore.Authorization
 @inject ITicketService TicketService
 @inject ILocalStorageService localStorage
 @inject IJobService JobService
 @attribute [Authorize(Roles = SD.Role_Customer + "," + SD.Role_Admin)]
 
+@* only admin *@
 <div class="row mt-2 mb-5">
     <h3 class="card-title text-info mb-3 ml-3">Create Ticket</h3>
     <div class="col-md-12">
@@ -30,17 +31,22 @@
                     <div class="form-group">
                         <label>JobId</label>
                         <InputSelect @bind-Value="Ticket.JobId" class="form-control">
-                            <option value="" >Select...</option>
                             @foreach (var job in jobList)
                             {
-                                <option value="@job.Id">@job.Title</option>
+                                if (job.Id == 1)
+                                {
+                                    <option value="@job.Id" selected>@job.Title</option>
+                                }
+                                else
+                                {
+                                    <option value="@job.Id">@job.Title</option>
+                                }
                             }
                         </InputSelect>
                     </div>
                     <div class="form-group">
                         <label>Status</label>
                         <InputSelect @bind-Value="Ticket.Status" class="form-control">
-                            <option value="">Select...</option>
                             <option value="@SD.StatusPending" selected>@SD.StatusPending</option>
                             <option value="@SD.StatusInProcess">@SD.StatusInProcess</option>
                             <option value="@SD.StatusDone">@SD.StatusDone</option>
@@ -88,10 +94,6 @@
     protected override async Task OnInitializedAsync()
     {
         jobList = await JobService.GetAllJobs();
-        if(Id != null)
-        {
-            Ticket = await TicketService.GetTicketDetails(Id.Value);
-        }
     }
     private async Task HandleTicketUpsert()
     {
