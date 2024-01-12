@@ -56,7 +56,7 @@ namespace MotorReparation.API.Controllers
             {
                 return NotFound();
             }
-            return Ok(result);
+            return Ok(ticket.Id);
         }
 
         [HttpPut]

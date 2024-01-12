@@ -7,7 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Contracts\**" />
+    <Compile Remove="DTOs\**" />
+    <Content Remove="Contracts\**" />
+    <Content Remove="DTOs\**" />
+    <EmbeddedResource Remove="Contracts\**" />
+    <EmbeddedResource Remove="DTOs\**" />
+    <None Remove="Contracts\**" />
+    <None Remove="DTOs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+    <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
@@ -16,8 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Pages\PartUnitPage\" />
   </ItemGroup>
 

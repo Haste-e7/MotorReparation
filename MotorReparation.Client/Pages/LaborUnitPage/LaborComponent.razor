@@ -5,55 +5,62 @@
 @inject IJSRuntime JsRuntime
 
 <div class="row mt-2 mb-5">
-    <h3 class="card-title text-info mb-3 ml-3">Create LaborUnit</h3>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <EditForm Model="LaborUnit" OnSubmit="()=>HandleLaborUnitUpsert(LaborUnit.Id)">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <EditForm Model="LaborUnit" OnSubmit="()=>HandleLaborUnitUpsert(TicketId)">
+                    <div class="form-group">
+                        <label>EmployeeId</label>
+                        <InputText @bind-Value="LaborUnit.EmployeeId" class="form-control"></InputText>
+                    </div>
+                    <div class="form-group">
+                        <label>LaborRate</label>
+                        <InputNumber @bind-Value="LaborUnit.LaborRate" class="form-control"></InputNumber>
+                    </div>
+                    <div class="form-group">
+                        <label>Hour</label>
+                        <InputNumber @bind-Value="LaborUnit.Hour" class="form-control"></InputNumber>
+                    </div>
+                    <div class="form-group">
+                        <label>CreatedDate</label>
+                        <p class="form-control">@LaborUnit.CreatedDate</p> @* auto gen *@
+                    </div>
+                    <div class="form-group">
+                        <label>CreatedBy</label>
+                        <p class="form-control">@LaborUnit.CreatedBy</p>
+                    </div>
+                    <div class="form-group">
+                        <label>LastModifiedDate</label>
+                        <p class="form-control">@LaborUnit.LastModifiedDate</p> @* auto gen *@
+                    </div>
+                    <div class="form-group">
+                        <label>LastModifiedBy</label>
+                        <p class="form-control">@LaborUnit.LastModifiedBy</p>
+                    </div>
+                    @if (LaborUnit.Id > 0)
+                    {
                         <div class="form-group">
-                            <label>Name</label>
-                            <InputNumber @bind-Value="LaborUnit.Id" class="form-control"></InputNumber>
-                        </div>
-                        <div class="form-group">
-                            <label>Name</label>
-                            <InputText @bind-Value="LaborUnit.EmployeeId" class="form-control"></InputText>
-                        </div>
-                        <div class="form-group">
-                            <label>LaborRate</label>
-                            <InputNumber @bind-Value="LaborUnit.LaborRate" class="form-control"></InputNumber>
-                        </div>
-                        <div class="form-group">
-                            <label>Hour</label>
-                            <InputNumber @bind-Value="LaborUnit.Hour" class="form-control"></InputNumber>
-                        </div>
-                        <div class="form-group">
-                            <label>CreatedDate</label>
-                            <p class="form-control">@LaborUnit.CreatedDate</p> @* auto gen *@
-                        </div>
-                        <div class="form-group">
-                            <label>CreatedBy</label>
-                            <p class="form-control">@LaborUnit.CreatedBy</p>
-                        </div>
-                        <div class="form-group">
-                            <label>LastModifiedDate</label>
-                            <p class="form-control">@LaborUnit.LastModifiedDate</p> @* auto gen *@
-                        </div>
-                        <div class="form-group">
-                            <label>LastModifiedBy</label>
-                            <p class="form-control">@LaborUnit.LastModifiedBy</p>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary">Create new LaborUnit</button>
+                            <button class="btn btn-primary disabled">Edit LaborUnit</button>
                             <button class="btn btn-danger" @onclick="()=>HandleDelete(LaborUnit.Id)">Delete</button>
                         </div>
-                    </EditForm>
-                </div>
+                    }
+                    else
+                    {
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    }
+                </EditForm>
             </div>
         </div>
-    
+    </div>
+
 </div>
 
 @code {
+    [Parameter]
+    public int TicketId { get; set; }
     [Parameter]
     public LaborUnit LaborUnit { get; set; } = new LaborUnit();
     private string Action { get; set; } = "Create";
@@ -72,6 +79,7 @@
             LaborUnit.CreatedBy = userDTO.Id;
             LaborUnit.LastModifiedDate = DateTime.UtcNow;
             LaborUnit.LastModifiedBy = userDTO.Id;
+            LaborUnit.TicketId = TicketId;
             var result = await HttpClient.PostAsJsonAsync($"api/LaborUnit", LaborUnit);
             await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
         }
