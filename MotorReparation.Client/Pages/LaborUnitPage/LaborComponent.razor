@@ -62,6 +62,8 @@
     [Parameter]
     public int TicketId { get; set; }
     [Parameter]
+    public Ticket TicketChanged { get; set; } = new Ticket();
+    [Parameter]
     public LaborUnit LaborUnit { get; set; } = new LaborUnit();
     private string Action { get; set; } = "Create";
 
@@ -81,14 +83,24 @@
             LaborUnit.LastModifiedBy = userDTO.Id;
             LaborUnit.TicketId = TicketId;
             var result = await HttpClient.PostAsJsonAsync($"api/LaborUnit", LaborUnit);
-            await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
+            if (result != null)
+            {
+                TicketChanged.LaborUnits.Add(LaborUnit);
+                await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
+            }
         }
         else
         {
+
             LaborUnit.LastModifiedDate = DateTime.UtcNow;
             LaborUnit.LastModifiedBy = userDTO.Id;
             var result = await HttpClient.PutAsJsonAsync($"api/LaborUnit?id={LaborUnit.Id}", LaborUnit);
-            await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
+            if (result != null)
+            {
+                Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != LaborUnit.Id).ToList();
+                Ticket.LaborUnits.Add(LaborUnit);
+                await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
+            }
         }
     }
     private async Task HandleDelete(int id)
@@ -98,8 +110,12 @@
             bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
             if (confirmed)
             {
-                await HttpClient.DeleteAsync($"api/LaborUnit?id={id}");
+                var result = await HttpClient.DeleteAsync($"api/LaborUnit?id={id}");
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
+                if (result != null)
+                {
+                    Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != id).ToList();
+                }
             }
         }
     }

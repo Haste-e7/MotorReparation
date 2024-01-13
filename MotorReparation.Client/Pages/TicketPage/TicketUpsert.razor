@@ -79,7 +79,7 @@
                     </div>
                     @foreach (var lu in Ticket.LaborUnits)
                     {
-                        <LaborComponent LaborUnit="lu"></LaborComponent>
+                        <LaborComponent LaborUnit="lu" @bind-Ticket="Ticket"></LaborComponent>
                     }
 
                 </EditForm>
@@ -98,7 +98,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <LaborComponent TicketId="Id ?? 0"></LaborComponent>
+                    <LaborComponent TicketId="Id ?? 0" @bind-Ticket="Ticket"></LaborComponent>
                 </div>
             </div>
         </div>
