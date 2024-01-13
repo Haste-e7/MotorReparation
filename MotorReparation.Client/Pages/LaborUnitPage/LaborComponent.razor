@@ -4,7 +4,7 @@
 @inject ILocalStorageService localStorage
 @inject IJSRuntime JsRuntime
 
-<div class="row mt-2 mb-5">
+<div class="row mt-2 mb-5 shadow-lg">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
@@ -62,7 +62,9 @@
     [Parameter]
     public int TicketId { get; set; }
     [Parameter]
-    public Ticket TicketChanged { get; set; } = new Ticket();
+    public Ticket Ticket { get; set; } = new Ticket();
+    [Parameter]
+    public EventCallback<Ticket> TicketChanged { get; set; }
     [Parameter]
     public LaborUnit LaborUnit { get; set; } = new LaborUnit();
     private string Action { get; set; } = "Create";
@@ -85,13 +87,15 @@
             var result = await HttpClient.PostAsJsonAsync($"api/LaborUnit", LaborUnit);
             if (result != null)
             {
-                TicketChanged.LaborUnits.Add(LaborUnit);
+                LaborUnit.Id = int.Parse(await result.Content.ReadAsStringAsync());
+                Ticket.LaborUnits.Add(LaborUnit);
+                await UpdateTicketFromLaborUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
+            LaborUnit = new LaborUnit();
         }
         else
         {
-
             LaborUnit.LastModifiedDate = DateTime.UtcNow;
             LaborUnit.LastModifiedBy = userDTO.Id;
             var result = await HttpClient.PutAsJsonAsync($"api/LaborUnit?id={LaborUnit.Id}", LaborUnit);
@@ -99,8 +103,10 @@
             {
                 Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != LaborUnit.Id).ToList();
                 Ticket.LaborUnits.Add(LaborUnit);
+                await UpdateTicketFromLaborUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
+            LaborUnit = new LaborUnit();
         }
     }
     private async Task HandleDelete(int id)
@@ -111,12 +117,17 @@
             if (confirmed)
             {
                 var result = await HttpClient.DeleteAsync($"api/LaborUnit?id={id}");
-                await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
                 if (result != null)
                 {
                     Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != id).ToList();
+                    await UpdateTicketFromLaborUnit();
                 }
+                await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
         }
+    }
+    private async Task UpdateTicketFromLaborUnit()
+    {
+        await TicketChanged.InvokeAsync(Ticket);
     }
 }

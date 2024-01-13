@@ -6,19 +6,20 @@
 @inject ILocalStorageService localStorage
 @inject IJobService JobService
 @inject HttpClient HttpClient
+@inject IJSRuntime JsRuntime
 
 @attribute [Authorize(Roles = SD.Role_Customer + "," + SD.Role_Admin)]
 
 <div class="row mt-2 mb-5">
     <h3 class="card-title text-info mb-3 ml-3">Ticket</h3>
     <div class="col-md-12">
-        <div class="form-group">
-            <button class="btn btn-primary">Create new ticket</button>
-            <NavLink href="ticket" class="btn btn-secondary">Back to Index</NavLink>
-        </div>
         <div class="card">
             <div class="card-body">
                 <EditForm Model="Ticket" OnSubmit="HandleTicketUpsert">
+                    <div class="form-group">
+                        <button class="btn btn-primary">Create new ticket</button>
+                        <NavLink href="ticket" class="btn btn-secondary">Back to Index</NavLink>
+                    </div>
                     @if (Id != null)
                     {
                         <div class="form-group">
@@ -55,7 +56,7 @@
                     </div>
                     <div class="form-group">
                         <label>AssignedBay</label>
-                        <InputNumber @bind-Value="Ticket.AssignedBay" class="form-control"></InputNumber>
+                        <InputNumber disable="" @bind-Value="Ticket.AssignedBay" class="form-control"></InputNumber>
                     </div>
                     <div class="form-group">
                         <label>Quantity</label>
@@ -110,6 +111,12 @@
     public int? Id { get; set; }
     private Ticket Ticket { get; set; } = new Ticket();
     private IEnumerable<Job> jobList { get; set; } = new List<Job>();
+    private bool IsDisable { get; set; } ;
+    private void HandleAssignedPage(ChangedEventArgs ce)
+    {
+        
+    }
+
     protected override async Task OnInitializedAsync()
     {
         jobList = await JobService.GetAllJobs();
@@ -129,12 +136,14 @@
             Ticket.LastModifiedBy = userDTO.Id;
             Ticket.BasketId = userDTO.BasketId;
             Ticket.Id = int.Parse(await TicketService.CreateTicket(Ticket));
+            await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
         }
         else
         {
             Ticket.LastModifiedDate = DateTime.UtcNow;
             Ticket.LastModifiedBy = userDTO.Id;
             var result = await TicketService.UpdateTicket(Ticket);
+            await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
         }
     }
 }
