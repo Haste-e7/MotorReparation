@@ -9,46 +9,46 @@
     <div class="col-md-12 my-2">
         <div class="card">
             <div class="card-body">
-                <EditForm Model="LaborUnit" OnSubmit="()=>HandleLaborUnitUpsert(TicketId)">
+                <EditForm Model="PartUnit" OnSubmit="()=>HandlePartUnitUpsert(TicketId)">
                     <div class="form-group">
-                        <label>EmployeeId</label>
-                        <InputSelect class="form-control" @bind-Value="LaborUnit.EmployeeId">
+                        <label>PartId</label>
+                        <InputSelect class="form-control" @bind-Value="PartUnit.PartId">
                             <option value="1">Select...</option>
-                            @foreach (var e in Employees)
+                            @foreach (var partId in ListPartId)
                             {
-                                <option value="@e.Id">@e.DisplayName</option>
+                                <option value="@partId">@partId</option>
                             }
                         </InputSelect>
                     </div>
                     <div class="form-group">
-                        <label>LaborRate</label>
-                        <InputNumber @bind-Value="LaborUnit.LaborRate" class="form-control"></InputNumber>
+                        <label>PartRate</label>
+                        <InputNumber @bind-Value="PartUnit.Price" class="form-control"></InputNumber>
                     </div>
                     <div class="form-group">
                         <label>Hour</label>
-                        <InputNumber @bind-Value="LaborUnit.Hour" class="form-control"></InputNumber>
+                        <InputNumber @bind-Value="PartUnit.Quantity" class="form-control"></InputNumber>
                     </div>
                     <div class="form-group">
                         <label>CreatedDate</label>
-                        <p class="form-control">@LaborUnit.CreatedDate</p> @* auto gen *@
+                        <p class="form-control">@PartUnit.CreatedDate</p> 
                     </div>
                     <div class="form-group">
                         <label>CreatedBy</label>
-                        <p class="form-control">@LaborUnit.CreatedBy</p>
+                        <p class="form-control">@PartUnit.CreatedBy</p>
                     </div>
                     <div class="form-group">
                         <label>LastModifiedDate</label>
-                        <p class="form-control">@LaborUnit.LastModifiedDate</p> @* auto gen *@
+                        <p class="form-control">@PartUnit.LastModifiedDate</p>
                     </div>
                     <div class="form-group">
                         <label>LastModifiedBy</label>
-                        <p class="form-control">@LaborUnit.LastModifiedBy</p>
+                        <p class="form-control">@PartUnit.LastModifiedBy</p>
                     </div>
-                    @if (LaborUnit.Id > 0)
+                    @if (PartUnit.Id > 0)
                     {
                         <div class="form-group">
-                            <button class="btn btn-primary disabled">Edit LaborUnit</button>
-                            <button class="btn btn-danger" @onclick="()=>HandleDelete(LaborUnit.Id)">Delete</button>
+                            <button class="btn btn-primary disabled">Edit PartUnit</button>
+                            <button class="btn btn-danger" @onclick="()=>HandleDelete(PartUnit.Id)">Delete</button>
                         </div>
                     }
                     else
@@ -73,65 +73,59 @@
     [Parameter]
     public EventCallback<Ticket> TicketChanged { get; set; }
     [Parameter]
-    public LaborUnit LaborUnit { get; set; } = new LaborUnit();
-    private List<AppUser> Employees { get; set; } = new List<AppUser>();
-
-    protected override async Task OnInitializedAsync()
+    public PartUnit PartUnit { get; set; } = new PartUnit();
+    private List<int> ListPartId { get; set; } = new List<int>()
     {
-        var response =await HttpClient.GetAsync($"api/appuser/GetAllUserInRole?role={SD.Role_Employee}");
-        if (response.IsSuccessStatusCode)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            Employees = JsonConvert.DeserializeObject<List<AppUser>>(content);
-        }
-    }
-    private async Task HandleLaborUnitUpsert(int Id)
+        1,2,3,4,5
+    };
+
+    private async Task HandlePartUnitUpsert(int Id)
     {
         var userDTO = await localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails);
-        if (LaborUnit.Id == 0)
+        if (PartUnit.Id == 0)
         {
-            LaborUnit.CreatedDate = DateTime.UtcNow;
-            LaborUnit.CreatedBy = userDTO.Id;
-            LaborUnit.LastModifiedDate = DateTime.UtcNow;
-            LaborUnit.LastModifiedBy = userDTO.Id;
-            LaborUnit.TicketId = TicketId;
-            var result = await HttpClient.PostAsJsonAsync($"api/LaborUnit", LaborUnit);
+            PartUnit.CreatedDate = DateTime.UtcNow;
+            PartUnit.CreatedBy = userDTO.Id;
+            PartUnit.LastModifiedDate = DateTime.UtcNow;
+            PartUnit.LastModifiedBy = userDTO.Id;
+            PartUnit.TicketId = TicketId;
+            var result = await HttpClient.PostAsJsonAsync($"api/PartUnit", PartUnit);
             if (result != null)
             {
-                LaborUnit.Id = int.Parse(await result.Content.ReadAsStringAsync());
-                Ticket.LaborUnits.Add(LaborUnit);
+                PartUnit.Id = int.Parse(await result.Content.ReadAsStringAsync());
+                Ticket.PartUnits.Add(PartUnit);
 
                 //update ticket LastModification
                 Ticket.LastModifiedDate = DateTime.UtcNow;
                 Ticket.LastModifiedBy = userDTO.Id;
                 var response = await HttpClient.PutAsJsonAsync($"api/ticket", Ticket);
 
-                await UpdateTicketFromLaborUnit();
+                await UpdateTicketFromPartUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
             await JsRuntime.InvokeVoidAsync("HideModal");
-            LaborUnit = new LaborUnit();
+            PartUnit = new PartUnit();
         }
         else
         {
-            LaborUnit.LastModifiedDate = DateTime.UtcNow;
-            LaborUnit.LastModifiedBy = userDTO.Id;
-            var result = await HttpClient.PutAsJsonAsync($"api/LaborUnit?id={LaborUnit.Id}", LaborUnit);
+            PartUnit.LastModifiedDate = DateTime.UtcNow;
+            PartUnit.LastModifiedBy = userDTO.Id;
+            var result = await HttpClient.PutAsJsonAsync($"api/PartUnit?id={PartUnit.Id}", PartUnit);
             if (result != null)
             {
-                Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != LaborUnit.Id).ToList();
-                Ticket.LaborUnits.Add(LaborUnit);
+                Ticket.PartUnits = Ticket.PartUnits.Where(x => x.Id != PartUnit.Id).ToList();
+                Ticket.PartUnits.Add(PartUnit);
 
                 //update ticket LastModification
                 Ticket.LastModifiedDate = DateTime.UtcNow;
                 Ticket.LastModifiedBy = userDTO.Id;
                 var response = await HttpClient.PutAsJsonAsync($"api/ticket", Ticket);
 
-                await UpdateTicketFromLaborUnit();
+                await UpdateTicketFromPartUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
             await JsRuntime.InvokeVoidAsync("HideModal");
-            LaborUnit = new LaborUnit();
+            PartUnit = new PartUnit();
         }
     }
     private async Task HandleDelete(int id)
@@ -141,25 +135,25 @@
             bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
             if (confirmed)
             {
-                var result = await HttpClient.DeleteAsync($"api/LaborUnit?id={id}");
+                var result = await HttpClient.DeleteAsync($"api/PartUnit?id={id}");
                 if (result != null)
                 {
                     var userDTO = await localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails);
-                    Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != id).ToList();
+                    Ticket.PartUnits = Ticket.PartUnits.Where(x => x.Id != id).ToList();
 
                     //update ticket LastModification
                     Ticket.LastModifiedDate = DateTime.UtcNow;
                     Ticket.LastModifiedBy = userDTO.Id;
                     var response = await HttpClient.PutAsJsonAsync($"api/ticket", Ticket);
 
-                    await UpdateTicketFromLaborUnit();
+                    await UpdateTicketFromPartUnit();
                 }
                 await JsRuntime.InvokeVoidAsync("HideModal");
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
         }
     }
-    private async Task UpdateTicketFromLaborUnit()
+    private async Task UpdateTicketFromPartUnit()
     {
         await TicketChanged.InvokeAsync(Ticket);
     }
