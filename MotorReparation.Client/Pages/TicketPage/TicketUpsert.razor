@@ -74,22 +74,25 @@
                         <label>Quantity</label>
                         <InputNumber @bind-Value="Ticket.Quantity" class="form-control"></InputNumber>
                     </div>
-                    <div class="form-group">
-                        <label>CreatedDate</label>
-                        <p class="form-control">@Ticket.CreatedDate</p> @* auto gen *@
-                    </div>
-                    <div class="form-group">
-                        <label>CreatedBy</label>
-                        <p class="form-control">@Ticket.CreatedBy</p>
-                    </div>
-                    <div class="form-group">
-                        <label>LastModifiedDate</label>
-                        <p class="form-control">@Ticket.LastModifiedDate</p> @* auto gen *@
-                    </div>
-                    <div class="form-group">
-                        <label>LastModifiedBy</label>
-                        <p class="form-control">@Ticket.LastModifiedBy</p>
-                    </div>
+                    @if (Id <= 0)
+                    {
+                        <div class="form-group">
+                            <label>CreatedDate</label>
+                            <p class="form-control">@Ticket.CreatedDate</p> @* auto gen *@
+                        </div>
+                        <div class="form-group">
+                            <label>CreatedBy</label>
+                            <p class="form-control">@Ticket.CreatedBy</p>
+                        </div>
+                        <div class="form-group">
+                            <label>LastModifiedDate</label>
+                            <p class="form-control">@Ticket.LastModifiedDate</p> @* auto gen *@
+                        </div>
+                        <div class="form-group">
+                            <label>LastModifiedBy</label>
+                            <p class="form-control">@Ticket.LastModifiedBy</p>
+                        </div>
+                    }
                     <div class="row">
                         @if (Ticket.LaborUnits.Count() > 0)
                         {
@@ -128,7 +131,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Labor Unit</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <LaborComponent TicketId="Id ?? 0" @bind-Ticket="Ticket"></LaborComponent>
+                    <LaborComponent Action="Create" TicketId="Id ?? 0" @bind-Ticket="Ticket"></LaborComponent>
                 </div>
             </div>
         </div>
@@ -145,7 +148,7 @@
                         <h5 class="modal-title" id="partUnitModalLabel"> Part Unit</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <PartUnitComponent TicketId="Id ?? 0" @bind-Ticket="Ticket"></PartUnitComponent>
+                    <PartUnitComponent Action="Create" TicketId="Id ?? 0" @bind-Ticket="Ticket"></PartUnitComponent>
                 </div>
             </div>
         </div>
@@ -187,6 +190,16 @@
             Ticket.CreatedBy = userDTO.Id;
             Ticket.LastModifiedDate = DateTime.UtcNow;
             Ticket.LastModifiedBy = userDTO.Id;
+            if (userDTO.BasketId <= 0)
+            {
+                var newBasket = new Basket() { CustomerId = userDTO.Id };
+                var result = await HttpClient.PostAsJsonAsync($"api/basket", newBasket);
+                if (result.IsSuccessStatusCode)
+                {
+                    userDTO.BasketId = int.Parse(await result.Content.ReadAsStringAsync());
+                    await localStorage.SetItemAsync(SD.Local_UserDetails, userDTO);
+                }
+            }
             Ticket.BasketId = userDTO.BasketId;
             Ticket.Id = int.Parse(await TicketService.CreateTicket(Ticket));
             await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");

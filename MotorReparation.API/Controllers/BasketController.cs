@@ -52,7 +52,7 @@ namespace MotorReparation.API.Controllers
             {
                 return NotFound();
             }
-            return Ok(result);
+            return Ok(basket.Id);
         }
     }
 }

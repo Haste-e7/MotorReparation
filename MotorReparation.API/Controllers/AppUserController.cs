@@ -46,15 +46,6 @@ namespace MotorReparation.API.Controllers
             {
                 return NotFound($"Unable to load user with ID '{userId}'.");
             }
-            var basket = await _basketRepository.GetByIdAsync(user.BasketId);
-            if (basket == null)
-            {
-                var newBasket = new Basket() { CustomerId = userId };
-                await _basketRepository.AddAsync(newBasket);
-                ticket.BasketId = newBasket.Id;
-                user.BasketId = newBasket.Id;
-                await _userManager.UpdateAsync(user);
-            }
             await _ticketRepository.AddAsync(ticket);
             //var basketId = _httpContextAccessor.HttpContext.User.FindFirstValue("BasketId");
             return Ok(ticket.Id);
