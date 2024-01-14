@@ -11,7 +11,7 @@
                 <EditForm Model="LaborUnit" OnSubmit="()=>HandleLaborUnitUpsert(TicketId)">
                     <div class="form-group">
                         <label>EmployeeId</label>
-                        <InputText @bind-Value="LaborUnit.EmployeeId" class="form-control"></InputText>
+                        <InputText @bind-Value="LaborUnit.EmployeeId" class="form-control"></InputText> @* auto populate *@
                     </div>
                     <div class="form-group">
                         <label>LaborRate</label>
@@ -89,6 +89,8 @@
             {
                 LaborUnit.Id = int.Parse(await result.Content.ReadAsStringAsync());
                 Ticket.LaborUnits.Add(LaborUnit);
+                Ticket.LastModifiedDate = DateTime.UtcNow;
+                Ticket.LastModifiedBy = userDTO.Id;
                 await UpdateTicketFromLaborUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
@@ -103,6 +105,8 @@
             {
                 Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != LaborUnit.Id).ToList();
                 Ticket.LaborUnits.Add(LaborUnit);
+                Ticket.LastModifiedDate = DateTime.UtcNow;
+                Ticket.LastModifiedBy = userDTO.Id;
                 await UpdateTicketFromLaborUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }

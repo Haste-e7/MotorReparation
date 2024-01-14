@@ -26,10 +26,9 @@ else
     <RadzenGrid AllowFiltering="true"
                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                 FilterMode="FilterMode.Advanced" AllowPaging="true" PageSize="4"
-                AllowSorting="true" Data="@Tickets" TItem="Ticket" ColumnWidth="200px">
+                AllowSorting="true" Data="@Tickets" TItem="Ticket" ColumnWidth="200px" FilterValue="Id">
         <Columns>
             <RadzenGridColumn TItem="Ticket" Property="Id" Title="Id" />
-            <RadzenGridColumn TItem="Ticket" Property="BasketId" Title="BasketId" />
             <RadzenGridColumn TItem="Ticket" Property="Title" Title="Title" />
             <RadzenGridColumn TItem="Ticket" Property="Description" Title="Description" />
             <RadzenGridColumn TItem="Ticket" Property="Status" Title="Status" />

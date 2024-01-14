@@ -37,8 +37,12 @@
                     </div>
                     <div class="form-group">
                         <label>JobId</label>
-                        <InputSelect @bind-Value="Ticket.JobId" class="form-control">
-                            <option value="">Select...</option>
+                        <InputSelect class="form-control" 
+                            ValueExpression="@(() => Ticket.JobId)"
+                            Value="@Ticket.JobId"
+                            ValueChanged="@((int jobIdSelected) => HandleAssignedBay(jobIdSelected))">
+                     @* <InputSelect class="form-control" @bind-Value="Ticket.JobId"> *@
+                            <option value="1">Select...</option>
                             @foreach (var job in jobList)
                             {
                                 <option value="@job.Id">@job.Title</option>
@@ -48,15 +52,15 @@
                     <div class="form-group">
                         <label>Status</label>
                         <InputSelect @bind-Value="Ticket.Status" class="form-control">
-                            <option value="">Select...</option>
-                            <option value="@SD.StatusPending" selected>@SD.StatusPending</option>
+                            <option value="@SD.StatusPending">Select...</option>
+                            <option value="@SD.StatusPending">@SD.StatusPending</option>
                             <option value="@SD.StatusInProcess">@SD.StatusInProcess</option>
                             <option value="@SD.StatusDone">@SD.StatusDone</option>
                         </InputSelect>
                     </div>
                     <div class="form-group">
                         <label>AssignedBay</label>
-                        <InputNumber disable="" @bind-Value="Ticket.AssignedBay" class="form-control"></InputNumber>
+                        <InputNumber disabled="@IsDisable" @bind-Value="Ticket.AssignedBay" class="form-control"></InputNumber>
                     </div>
                     <div class="form-group">
                         <label>Quantity</label>
@@ -111,10 +115,17 @@
     public int? Id { get; set; }
     private Ticket Ticket { get; set; } = new Ticket();
     private IEnumerable<Job> jobList { get; set; } = new List<Job>();
-    private bool IsDisable { get; set; } ;
-    private void HandleAssignedPage(ChangedEventArgs ce)
+    private bool IsDisable { get; set; } = false;
+    private void HandleAssignedBay(int jobIdSelected)
     {
-        
+        Ticket.JobId = jobIdSelected;
+        Console.WriteLine(jobIdSelected);
+        var jobType = jobList.FirstOrDefault(j => j.Id == jobIdSelected).JobType;
+        IsDisable = jobType == SD.TypeRepair;
+        if (IsDisable)
+        {
+            Ticket.AssignedBay = 0;
+        }
     }
 
     protected override async Task OnInitializedAsync()

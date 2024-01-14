@@ -56,7 +56,7 @@ namespace MotorReparation.API.Controllers
             }
             await _ticketRepository.AddAsync(ticket);
             //var basketId = _httpContextAccessor.HttpContext.User.FindFirstValue("BasketId");
-            return NoContent();
+            return Ok(ticket.Id);
         }
     }
 }
