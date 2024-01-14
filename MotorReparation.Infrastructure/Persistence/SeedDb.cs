@@ -59,10 +59,19 @@ namespace MotorReparation.Infrastructure.Persistence
                 _roleManager.CreateAsync(new IdentityRole(StringDefinition.Role_Customer)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(StringDefinition.Role_Employee)).GetAwaiter().GetResult();
 
+                //admin
                 var admin = context.Users.FirstOrDefault(u => u.Email == "admin@test.com");
                 userManager.AddToRoleAsync(admin, StringDefinition.Role_Admin).GetAwaiter().GetResult();
 
+                //employees
+                var employee1 = context.Users.FirstOrDefault(u => u.Email == "employee1@test.com");
+                userManager.AddToRoleAsync(employee1, StringDefinition.Role_Employee).GetAwaiter().GetResult();
 
+                var employee2 = context.Users.FirstOrDefault(u => u.Email == "employee2@test.com");
+                userManager.AddToRoleAsync(employee2, StringDefinition.Role_Employee).GetAwaiter().GetResult();
+
+                var employee3 = context.Users.FirstOrDefault(u => u.Email == "employee3@test.com");
+                userManager.AddToRoleAsync(employee3, StringDefinition.Role_Employee).GetAwaiter().GetResult();
 
                 var Jobs = new List<Job>
                 {
@@ -93,7 +102,6 @@ namespace MotorReparation.Infrastructure.Persistence
                     }
                 };
                 await context.AddRangeAsync(Jobs);
-                //await context.AddRangeAsync(basket);
 
                 await context.SaveChangesAsync();
             }

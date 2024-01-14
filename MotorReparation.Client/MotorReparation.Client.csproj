@@ -28,10 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\PartUnitPage\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MotorReparation.Domain\MotorReparation.Domain.csproj" />
     <ProjectReference Include="..\MotorReparation.Models\MotorReparation.Models.csproj" />
   </ItemGroup>

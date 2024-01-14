@@ -48,7 +48,6 @@
                                      ValueExpression="@(() => Ticket.JobId)"
                                      Value="@Ticket.JobId"
                                      ValueChanged="@((int jobIdSelected) => HandleAssignedBay(jobIdSelected))">
-                            @* <InputSelect class="form-control" @bind-Value="Ticket.JobId"> *@
                             <option value="1">Select...</option>
                             @foreach (var job in jobList)
                             {
@@ -89,16 +88,20 @@
                         <label>LastModifiedBy</label>
                         <p class="form-control">@Ticket.LastModifiedBy</p>
                     </div>
-                    @foreach (var lu in Ticket.LaborUnits)
+                    @if (Ticket.LaborUnits.Count() > 0)
                     {
-                        <LaborComponent LaborUnit="lu" @bind-Ticket="Ticket"></LaborComponent>
+                        <h3>Labor Unit</h3>
+                        foreach (var lu in Ticket.LaborUnits)
+                        {
+                            <LaborComponent LaborUnit="lu" @bind-Ticket="Ticket"></LaborComponent>
+                        }
                     }
 
                 </EditForm>
             </div>
         </div>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Create new Labor unit
         </button>
 
@@ -155,6 +158,7 @@
             Ticket.BasketId = userDTO.BasketId;
             Ticket.Id = int.Parse(await TicketService.CreateTicket(Ticket));
             await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
+            await JsRuntime.InvokeVoidAsync("HideModal");
         }
         else
         {
@@ -162,6 +166,7 @@
             Ticket.LastModifiedBy = userDTO.Id;
             var result = await TicketService.UpdateTicket(Ticket);
             await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
+            await JsRuntime.InvokeVoidAsync("HideModal");
         }
     }
 }

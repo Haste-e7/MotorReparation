@@ -59,9 +59,16 @@ namespace MotorReparation.API.Controllers
             //var basketId = _httpContextAccessor.HttpContext.User.FindFirstValue("BasketId");
             return Ok(ticket.Id);
         }
-        public async Task<ICollection<AppUser>> GetAllUserInRole()
+        [HttpGet]
+        public async Task<IActionResult> GetAllUserInRole(string role)
         {
-            return await _userManager.GetUsersInRoleAsync(SD.Role_Employee);
+         
+            var result = await _userManager.GetUsersInRoleAsync(role);
+            if(result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }
