@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label>PartId</label>
                         <InputSelect class="form-control" @bind-Value="PartUnit.PartId">
-                            <option value="1">Select...</option>
+                            <option value="0">Select...</option>
                             @foreach (var partId in ListPartId)
                             {
                                 <option value="@partId">@partId</option>
@@ -21,11 +21,11 @@
                         </InputSelect>
                     </div>
                     <div class="form-group">
-                        <label>PartRate</label>
+                        <label>Price</label>
                         <InputNumber @bind-Value="PartUnit.Price" class="form-control"></InputNumber>
                     </div>
                     <div class="form-group">
-                        <label>Hour</label>
+                        <label>Quantity</label>
                         <InputNumber @bind-Value="PartUnit.Quantity" class="form-control"></InputNumber>
                     </div>
                     <div class="form-group">
@@ -103,7 +103,7 @@
                 await UpdateTicketFromPartUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
-            await JsRuntime.InvokeVoidAsync("HideModal");
+            await JsRuntime.InvokeVoidAsync("HidePartUnitModal");
             PartUnit = new PartUnit();
         }
         else
@@ -124,7 +124,7 @@
                 await UpdateTicketFromPartUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
-            await JsRuntime.InvokeVoidAsync("HideModal");
+            await JsRuntime.InvokeVoidAsync("HidePartUnitModal");
             PartUnit = new PartUnit();
         }
     }
@@ -148,7 +148,7 @@
 
                     await UpdateTicketFromPartUnit();
                 }
-                await JsRuntime.InvokeVoidAsync("HideModal");
+                await JsRuntime.InvokeVoidAsync("HidePartUnitModal");
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
         }

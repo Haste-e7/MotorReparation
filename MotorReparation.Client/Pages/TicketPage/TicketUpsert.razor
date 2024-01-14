@@ -2,6 +2,8 @@
 @page "/ticket/edit/{Id:int}"
 @using Microsoft.AspNetCore.Authorization
 @using MotorReparation.Client.Pages.LaborUnitPage
+@using MotorReparation.Client.Pages.PartUnitPage
+
 @inject ITicketService TicketService
 @inject ILocalStorageService localStorage
 @inject IJobService JobService
@@ -48,7 +50,7 @@
                                      ValueExpression="@(() => Ticket.JobId)"
                                      Value="@Ticket.JobId"
                                      ValueChanged="@((int jobIdSelected) => HandleAssignedBay(jobIdSelected))">
-                            <option value="1">Select...</option>
+                            <option value="0">Select...</option>
                             @foreach (var job in jobList)
                             {
                                 <option value="@job.Id">@job.Title</option>
@@ -96,24 +98,48 @@
                             <LaborComponent LaborUnit="lu" @bind-Ticket="Ticket"></LaborComponent>
                         }
                     }
-
+                    @if (Ticket.PartUnits.Count() > 0)
+                    {
+                        <h3 class="mt-5">Part Unit</h3>
+                        foreach (var p in Ticket.PartUnits)
+                        {
+                            <PartUnitComponent PartUnit="p" @bind-Ticket="Ticket"></PartUnitComponent>
+                        }
+                    }
                 </EditForm>
             </div>
         </div>
-        <!-- Button trigger modal -->
+        <!-- Button trigger modal Labor Unit-->
         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Create new Labor unit
         </button>
 
-        <!-- Modal -->
+        <!-- Modal Labor Unit-->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Labor Unit</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <LaborComponent TicketId="Id ?? 0" @bind-Ticket="Ticket"></LaborComponent>
+                </div>
+            </div>
+        </div>
+        <!-- Button trigger modal Part Unit-->
+        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#partUnitModal">
+            Create new Part unit
+        </button>
+
+        <!-- Modal Part Unit-->
+        <div class="modal fade" id="partUnitModal" tabindex="-1" aria-labelledby="partUnitModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="partUnitModalLabel"> Part Unit</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <PartUnitComponent TicketId="Id ?? 0" @bind-Ticket="Ticket"></PartUnitComponent>
                 </div>
             </div>
         </div>

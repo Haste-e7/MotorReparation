@@ -36,3 +36,6 @@ function HideDeleteConfirmationModal() {
 function HideModal() {
     $('#exampleModal').modal('hide');
 }
+function HidePartUnitModal() {
+    $('#partUnitModal').modal('hide');
+}

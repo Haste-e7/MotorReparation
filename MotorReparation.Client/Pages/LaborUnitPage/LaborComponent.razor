@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label>EmployeeId</label>
                         <InputSelect class="form-control" @bind-Value="LaborUnit.EmployeeId">
-                            <option value="1">Select...</option>
+                            <option value="0">Select...</option>
                             @foreach (var e in Employees)
                             {
                                 <option value="@e.Id">@e.DisplayName</option>
