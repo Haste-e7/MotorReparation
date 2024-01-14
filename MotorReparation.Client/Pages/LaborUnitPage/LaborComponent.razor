@@ -5,64 +5,59 @@
 @inject ILocalStorageService localStorage
 @inject IJSRuntime JsRuntime
 
-<div class="row shadow-lg">
-    <div class="col-md-12 my-2">
-        <div class="card">
-            <div class="card-body">
-                <EditForm Model="LaborUnit" OnSubmit="()=>HandleLaborUnitUpsert(TicketId)">
-                    <div class="form-group">
-                        <label>EmployeeId</label>
-                        <InputSelect class="form-control" @bind-Value="LaborUnit.EmployeeId">
-                            <option value="0">Select...</option>
-                            @foreach (var e in Employees)
-                            {
-                                <option value="@e.Id">@e.DisplayName</option>
-                            }
-                        </InputSelect>
-                    </div>
-                    <div class="form-group">
-                        <label>LaborRate</label>
-                        <InputNumber @bind-Value="LaborUnit.LaborRate" class="form-control"></InputNumber>
-                    </div>
-                    <div class="form-group">
-                        <label>Hour</label>
-                        <InputNumber @bind-Value="LaborUnit.Hour" class="form-control"></InputNumber>
-                    </div>
-                    <div class="form-group">
-                        <label>CreatedDate</label>
-                        <p class="form-control">@LaborUnit.CreatedDate</p> @* auto gen *@
-                    </div>
-                    <div class="form-group">
-                        <label>CreatedBy</label>
-                        <p class="form-control">@LaborUnit.CreatedBy</p>
-                    </div>
-                    <div class="form-group">
-                        <label>LastModifiedDate</label>
-                        <p class="form-control">@LaborUnit.LastModifiedDate</p> @* auto gen *@
-                    </div>
-                    <div class="form-group">
-                        <label>LastModifiedBy</label>
-                        <p class="form-control">@LaborUnit.LastModifiedBy</p>
-                    </div>
-                    @if (LaborUnit.Id > 0)
+<div class="card my-3">
+    <div class="card-body">
+        <EditForm Model="LaborUnit" OnSubmit="()=>HandleLaborUnitUpsert(TicketId)">
+            <div class="form-group">
+                <label>EmployeeId</label>
+                <InputSelect class="form-control" @bind-Value="LaborUnit.EmployeeId">
+                    <option value="0">Select...</option>
+                    @foreach (var e in Employees)
                     {
-                        <div class="form-group">
-                            <button class="btn btn-primary disabled">Edit LaborUnit</button>
-                            <button class="btn btn-danger" @onclick="()=>HandleDelete(LaborUnit.Id)">Delete</button>
-                        </div>
+                        <option value="@e.Id">@e.DisplayName</option>
                     }
-                    else
-                    {
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    }
-                </EditForm>
+                </InputSelect>
             </div>
-        </div>
+            <div class="form-group">
+                <label>LaborRate</label>
+                <InputNumber @bind-Value="LaborUnit.LaborRate" class="form-control"></InputNumber>
+            </div>
+            <div class="form-group">
+                <label>Hour</label>
+                <InputNumber @bind-Value="LaborUnit.Hour" class="form-control"></InputNumber>
+            </div>
+            <div class="form-group">
+                <label>CreatedDate</label>
+                <p class="form-control">@LaborUnit.CreatedDate</p> @* auto gen *@
+            </div>
+            <div class="form-group">
+                <label>CreatedBy</label>
+                <p class="form-control">@LaborUnit.CreatedBy</p>
+            </div>
+            <div class="form-group">
+                <label>LastModifiedDate</label>
+                <p class="form-control">@LaborUnit.LastModifiedDate</p> @* auto gen *@
+            </div>
+            <div class="form-group">
+                <label>LastModifiedBy</label>
+                <p class="form-control">@LaborUnit.LastModifiedBy</p>
+            </div>
+            @if (LaborUnit.Id > 0)
+            {
+                <div class="form-group">
+                    <button class="btn btn-primary disabled">Edit LaborUnit</button>
+                    <button class="btn btn-danger" @onclick="()=>HandleDelete(LaborUnit.Id)">Delete</button>
+                </div>
+            }
+            else
+            {
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            }
+        </EditForm>
     </div>
-
 </div>
 
 @code {
@@ -74,11 +69,13 @@
     public EventCallback<Ticket> TicketChanged { get; set; }
     [Parameter]
     public LaborUnit LaborUnit { get; set; } = new LaborUnit();
+    [Parameter]
+    public string Action { get; set; } = "";
     private List<AppUser> Employees { get; set; } = new List<AppUser>();
 
     protected override async Task OnInitializedAsync()
     {
-        var response =await HttpClient.GetAsync($"api/appuser/GetAllUserInRole?role={SD.Role_Employee}");
+        var response = await HttpClient.GetAsync($"api/appuser/GetAllUserInRole?role={SD.Role_Employee}");
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();

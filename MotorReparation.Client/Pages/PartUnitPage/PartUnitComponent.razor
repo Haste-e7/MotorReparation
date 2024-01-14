@@ -5,65 +5,61 @@
 @inject ILocalStorageService localStorage
 @inject IJSRuntime JsRuntime
 
-<div class="row shadow-lg">
-    <div class="col-md-12 my-2">
-        <div class="card">
-            <div class="card-body">
-                <EditForm Model="PartUnit" OnSubmit="()=>HandlePartUnitUpsert(TicketId)">
-                    <div class="form-group">
-                        <label>PartId</label>
-                        <InputSelect class="form-control" @bind-Value="PartUnit.PartId">
-                            <option value="0">Select...</option>
-                            @foreach (var partId in ListPartId)
-                            {
-                                <option value="@partId">@partId</option>
-                            }
-                        </InputSelect>
-                    </div>
-                    <div class="form-group">
-                        <label>Price</label>
-                        <InputNumber @bind-Value="PartUnit.Price" class="form-control"></InputNumber>
-                    </div>
-                    <div class="form-group">
-                        <label>Quantity</label>
-                        <InputNumber @bind-Value="PartUnit.Quantity" class="form-control"></InputNumber>
-                    </div>
-                    <div class="form-group">
-                        <label>CreatedDate</label>
-                        <p class="form-control">@PartUnit.CreatedDate</p> 
-                    </div>
-                    <div class="form-group">
-                        <label>CreatedBy</label>
-                        <p class="form-control">@PartUnit.CreatedBy</p>
-                    </div>
-                    <div class="form-group">
-                        <label>LastModifiedDate</label>
-                        <p class="form-control">@PartUnit.LastModifiedDate</p>
-                    </div>
-                    <div class="form-group">
-                        <label>LastModifiedBy</label>
-                        <p class="form-control">@PartUnit.LastModifiedBy</p>
-                    </div>
-                    @if (PartUnit.Id > 0)
+<div class="card my-3">
+    <div class="card-body">
+        <EditForm Model="PartUnit" OnSubmit="()=>HandlePartUnitUpsert(TicketId)">
+            <div class="form-group">
+                <label>PartId</label>
+                <InputSelect class="form-control" @bind-Value="PartUnit.PartId">
+                    <option value="0">Select...</option>
+                    @foreach (var partId in ListPartId)
                     {
-                        <div class="form-group">
-                            <button class="btn btn-primary disabled">Edit PartUnit</button>
-                            <button class="btn btn-danger" @onclick="()=>HandleDelete(PartUnit.Id)">Delete</button>
-                        </div>
+                        <option value="@partId">@partId</option>
                     }
-                    else
-                    {
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    }
-                </EditForm>
+                </InputSelect>
             </div>
-        </div>
+            <div class="form-group">
+                <label>Price</label>
+                <InputNumber @bind-Value="PartUnit.Price" class="form-control"></InputNumber>
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <InputNumber @bind-Value="PartUnit.Quantity" class="form-control"></InputNumber>
+            </div>
+            <div class="form-group">
+                <label>CreatedDate</label>
+                <p class="form-control">@PartUnit.CreatedDate</p>
+            </div>
+            <div class="form-group">
+                <label>CreatedBy</label>
+                <p class="form-control">@PartUnit.CreatedBy</p>
+            </div>
+            <div class="form-group">
+                <label>LastModifiedDate</label>
+                <p class="form-control">@PartUnit.LastModifiedDate</p>
+            </div>
+            <div class="form-group">
+                <label>LastModifiedBy</label>
+                <p class="form-control">@PartUnit.LastModifiedBy</p>
+            </div>
+            @if (PartUnit.Id > 0)
+            {
+                <div class="form-group">
+                    <button class="btn btn-primary disabled">Edit PartUnit</button>
+                    <button class="btn btn-danger" @onclick="()=>HandleDelete(PartUnit.Id)">Delete</button>
+                </div>
+            }
+            else
+            {
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            }
+        </EditForm>
     </div>
-
 </div>
+
 
 @code {
     [Parameter]
@@ -74,6 +70,8 @@
     public EventCallback<Ticket> TicketChanged { get; set; }
     [Parameter]
     public PartUnit PartUnit { get; set; } = new PartUnit();
+    [Parameter]
+    public string Action { get; set; } = "";
     private List<int> ListPartId { get; set; } = new List<int>()
     {
         1,2,3,4,5

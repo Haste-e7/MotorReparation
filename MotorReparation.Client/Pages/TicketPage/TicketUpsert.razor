@@ -90,22 +90,28 @@
                         <label>LastModifiedBy</label>
                         <p class="form-control">@Ticket.LastModifiedBy</p>
                     </div>
-                    @if (Ticket.LaborUnits.Count() > 0)
-                    {
-                        <h3>Labor Unit</h3>
-                        foreach (var lu in Ticket.LaborUnits)
+                    <div class="row">
+                        @if (Ticket.LaborUnits.Count() > 0)
                         {
-                            <LaborComponent LaborUnit="lu" @bind-Ticket="Ticket"></LaborComponent>
+                            <div class="col-md-6 my-2 shadow-lg">
+                                <h3 class="mt-3">Labor Unit</h3>
+                                @foreach (var lu in Ticket.LaborUnits)
+                                {
+                                    <LaborComponent Action="Display" LaborUnit="lu" @bind-Ticket="Ticket"></LaborComponent>
+                                }
+                            </div>
                         }
-                    }
-                    @if (Ticket.PartUnits.Count() > 0)
-                    {
-                        <h3 class="mt-5">Part Unit</h3>
-                        foreach (var p in Ticket.PartUnits)
+                        @if (Ticket.PartUnits.Count() > 0)
                         {
-                            <PartUnitComponent PartUnit="p" @bind-Ticket="Ticket"></PartUnitComponent>
+                            <div class="col-md-6 my-2 shadow-lg">
+                                <h3 class="mt-3">Part Unit</h3>
+                                @foreach (var p in Ticket.PartUnits)
+                                {
+                                    <PartUnitComponent Action="Display" PartUnit="p" @bind-Ticket="Ticket"></PartUnitComponent>
+                                }
+                            </div>
                         }
-                    }
+                    </div>
                 </EditForm>
             </div>
         </div>
