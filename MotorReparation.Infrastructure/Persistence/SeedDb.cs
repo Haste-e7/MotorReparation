@@ -5,12 +5,12 @@ namespace MotorReparation.Infrastructure.Persistence
 {
     public class SeedDb
     {
-        public static async Task SeedData(MotorReparationDbContext context, 
-            UserManager<AppUser> userManager, 
+        public static async Task SeedData(MotorReparationDbContext context,
+            UserManager<AppUser> userManager,
             RoleManager<IdentityRole> _roleManager)
         {
-            if ( !(userManager.Users.Any() && context.Jobs.Any() 
-                && context.Roles.Any(x => x.Name == StringDefinition.Role_Admin)) )
+            if (!(userManager.Users.Any() && context.Jobs.Any()
+                && context.Roles.Any(x => x.Name == StringDefinition.Role_Admin)))
             {
                 var users = new List<AppUser>
                 {
@@ -24,9 +24,23 @@ namespace MotorReparation.Infrastructure.Persistence
                     new AppUser
                     {
                         Id = "2",
-                        DisplayName = "Employee",
-                        UserName = "employee",
-                        Email = "employee@test.com"
+                        DisplayName = "Employee1",
+                        UserName = "employee1",
+                        Email = "employee1@test.com"
+                    },
+                    new AppUser
+                    {
+                        Id = "4",
+                        DisplayName = "Employee2",
+                        UserName = "employee2",
+                        Email = "employee2@test.com"
+                    },
+                    new AppUser
+                    {
+                        Id = "5",
+                        DisplayName = "Employee3",
+                        UserName = "employee3",
+                        Email = "employee3@test.com"
                     },
                     new AppUser
                     {
@@ -48,45 +62,7 @@ namespace MotorReparation.Infrastructure.Persistence
                 var admin = context.Users.FirstOrDefault(u => u.Email == "admin@test.com");
                 userManager.AddToRoleAsync(admin, StringDefinition.Role_Admin).GetAwaiter().GetResult();
 
-                /*var basket = new Basket()
-                {
-                    Id = 1,
-                    CustomerId = "1",
-                    Tickets = new List<Ticket>
-                    {
-                        new Ticket
-                        {
-                            Id=1,
-                            BasketId = 1,
-                            JobId = 1,
-                            Title = "Quick repair",
-                            Description = "Quick repair sth",
-                            Quantity = 1,
-                            AssignedBay = 1,
-                            Status = StringDefinition.StatusDone,
-                        },
-                        new Ticket
-                        {
-                            Id=2,
-                            BasketId = 1,
-                            JobId = 2,
-                            Title = "Lengthy repair",
-                            Description = "Lengthy Job",
-                            Quantity = 1,
-                            Status = StringDefinition.StatusInProcess,
-                        },
-                        new Ticket
-                        {
-                            Id=3,
-                            BasketId = 1,
-                            JobId = 3,
-                            Title = "Lengthy repair",
-                            Description = "Lengthy Job",
-                            Quantity = 1,
-                            Status = StringDefinition.StatusInProcess,
-                        }
-                    }
-                };*/
+
 
                 var Jobs = new List<Job>
                 {

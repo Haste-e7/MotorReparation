@@ -16,9 +16,16 @@
         <div class="card">
             <div class="card-body">
                 <EditForm Model="Ticket" OnSubmit="HandleTicketUpsert">
-                    <div class="form-group">
-                        <button class="btn btn-primary">Create new ticket</button>
-                        <NavLink href="ticket" class="btn btn-secondary">Back to Index</NavLink>
+                    <div class="form-group mb-2">
+                        @if (Id != null)
+                        {
+                            <button class="btn btn-primary">Edit ticket</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary">Create new ticket</button>
+                        }
+                        <NavLink href="ticket" class="btn btn-secondary mx-2 pl-5">Back to Index</NavLink>
                     </div>
                     @if (Id != null)
                     {
@@ -37,11 +44,11 @@
                     </div>
                     <div class="form-group">
                         <label>JobId</label>
-                        <InputSelect class="form-control" 
-                            ValueExpression="@(() => Ticket.JobId)"
-                            Value="@Ticket.JobId"
-                            ValueChanged="@((int jobIdSelected) => HandleAssignedBay(jobIdSelected))">
-                     @* <InputSelect class="form-control" @bind-Value="Ticket.JobId"> *@
+                        <InputSelect class="form-control"
+                                     ValueExpression="@(() => Ticket.JobId)"
+                                     Value="@Ticket.JobId"
+                                     ValueChanged="@((int jobIdSelected) => HandleAssignedBay(jobIdSelected))">
+                            @* <InputSelect class="form-control" @bind-Value="Ticket.JobId"> *@
                             <option value="1">Select...</option>
                             @foreach (var job in jobList)
                             {

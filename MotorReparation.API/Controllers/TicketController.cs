@@ -6,6 +6,7 @@ using MotorReparation.Application.Services;
 using MotorReparation.Domain;
 using MotorReparation.Infrastructure.Repositories;
 using MotorReparation.Models.Commons;
+using System.ComponentModel;
 
 namespace MotorReparation.API.Controllers
 {
@@ -59,7 +60,7 @@ namespace MotorReparation.API.Controllers
             return Ok(ticket.Id);
         }
 
-        [HttpPut]
+        [HttpPut(Name = "UpdateTicket")]
         public async Task<IActionResult> UpdateTicket(Ticket ticket)
         {
             var result = await _ticketRepository.UpdateAsync(ticket);

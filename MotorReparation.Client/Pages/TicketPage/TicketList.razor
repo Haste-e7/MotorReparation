@@ -7,8 +7,6 @@
 
 @attribute [Authorize(Roles = SD.Role_Customer + "," + SD.Role_Admin)]
 
-<h3>TicketList</h3>
-
 @if(Tickets == null)
 {
     <h3>Loading...</h3>
@@ -17,10 +15,10 @@ else
 {
     <div class="row mt-4">
         <div class="col-8">
-            <h4 class="card-title text-info">Ticket</h4>
+            <h4 class="card-title text-info">Ticket List</h4>
         </div>
         <div class="col-3 offset-1">
-            <NavLink href="ticket/create" class="btn btn-info form-control">Add New Ticket</NavLink>
+            <NavLink href="ticket/create" class="btn btn-info form-control mb-4">Add New Ticket</NavLink>
         </div>
     </div>
     <RadzenGrid AllowFiltering="true"

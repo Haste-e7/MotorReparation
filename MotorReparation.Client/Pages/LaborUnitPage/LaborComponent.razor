@@ -89,8 +89,12 @@
             {
                 LaborUnit.Id = int.Parse(await result.Content.ReadAsStringAsync());
                 Ticket.LaborUnits.Add(LaborUnit);
+
+                //update ticket LastModification
                 Ticket.LastModifiedDate = DateTime.UtcNow;
                 Ticket.LastModifiedBy = userDTO.Id;
+                var response = await HttpClient.PutAsJsonAsync($"api/ticket", Ticket);
+
                 await UpdateTicketFromLaborUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
@@ -105,8 +109,12 @@
             {
                 Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != LaborUnit.Id).ToList();
                 Ticket.LaborUnits.Add(LaborUnit);
+
+                //update ticket LastModification
                 Ticket.LastModifiedDate = DateTime.UtcNow;
                 Ticket.LastModifiedBy = userDTO.Id;
+                var response = await HttpClient.PutAsJsonAsync($"api/ticket", Ticket);
+
                 await UpdateTicketFromLaborUnit();
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             }
@@ -123,7 +131,14 @@
                 var result = await HttpClient.DeleteAsync($"api/LaborUnit?id={id}");
                 if (result != null)
                 {
+                    var userDTO = await localStorage.GetItemAsync<UserDTO>(SD.Local_UserDetails);
                     Ticket.LaborUnits = Ticket.LaborUnits.Where(x => x.Id != id).ToList();
+
+                    //update ticket LastModification
+                    Ticket.LastModifiedDate = DateTime.UtcNow;
+                    Ticket.LastModifiedBy = userDTO.Id;
+                    var response = await HttpClient.PutAsJsonAsync($"api/ticket", Ticket);
+
                     await UpdateTicketFromLaborUnit();
                 }
                 await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MotorReparation.Application.Contracts.Persistence;
 using MotorReparation.Domain;
+using MotorReparation.Models.Commons;
 using System.Security.Claims;
 
 namespace MotorReparation.API.Controllers
@@ -57,6 +58,10 @@ namespace MotorReparation.API.Controllers
             await _ticketRepository.AddAsync(ticket);
             //var basketId = _httpContextAccessor.HttpContext.User.FindFirstValue("BasketId");
             return Ok(ticket.Id);
+        }
+        public async Task<ICollection<AppUser>> GetAllUserInRole()
+        {
+            return await _userManager.GetUsersInRoleAsync(SD.Role_Employee);
         }
     }
 }

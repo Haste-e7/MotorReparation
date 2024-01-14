@@ -83,8 +83,7 @@ namespace MotorReparation.Client.Services
 
         public async Task<string> UpdateTicket(Ticket ticket)
         {
-            var payload = JsonContent.Create(ticket);
-            var response = await _client.PutAsJsonAsync($"api/ticket/{ticket.Id}", ticket);
+            var response = await _client.PutAsJsonAsync($"api/ticket", ticket);
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
