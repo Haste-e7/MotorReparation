@@ -9,6 +9,7 @@
 @inject IJobService JobService
 @inject HttpClient HttpClient
 @inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
 
 @attribute [Authorize(Roles = SD.Role_Customer + "," + SD.Role_Admin)]
 
@@ -74,11 +75,11 @@
                         <label>Quantity</label>
                         <InputNumber @bind-Value="Ticket.Quantity" class="form-control"></InputNumber>
                     </div>
-                    @if (Id <= 0)
+                    @if (Id > 0)
                     {
                         <div class="form-group">
                             <label>CreatedDate</label>
-                            <p class="form-control">@Ticket.CreatedDate</p> @* auto gen *@
+                            <p class="form-control">@Ticket.CreatedDate</p>
                         </div>
                         <div class="form-group">
                             <label>CreatedBy</label>
@@ -86,7 +87,7 @@
                         </div>
                         <div class="form-group">
                             <label>LastModifiedDate</label>
-                            <p class="form-control">@Ticket.LastModifiedDate</p> @* auto gen *@
+                            <p class="form-control">@Ticket.LastModifiedDate</p>
                         </div>
                         <div class="form-group">
                             <label>LastModifiedBy</label>
@@ -131,7 +132,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Labor Unit</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <LaborComponent Action="Create" TicketId="Id ?? 0" @bind-Ticket="Ticket"></LaborComponent>
+                    <LaborComponent Action="Create" @bind-Ticket="Ticket"></LaborComponent>
                 </div>
             </div>
         </div>
@@ -148,7 +149,7 @@
                         <h5 class="modal-title" id="partUnitModalLabel"> Part Unit</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <PartUnitComponent Action="Create" TicketId="Id ?? 0" @bind-Ticket="Ticket"></PartUnitComponent>
+                    <PartUnitComponent Action="Create" @bind-Ticket="Ticket"></PartUnitComponent>
                 </div>
             </div>
         </div>
@@ -193,7 +194,7 @@
             if (userDTO.BasketId <= 0)
             {
                 var newBasket = new Basket() { CustomerId = userDTO.Id };
-                var result = await HttpClient.PostAsJsonAsync($"api/basket", newBasket);
+                var result = await HttpClient.PostAsJsonAsync($"api/Basket/CreateBasket", newBasket);
                 if (result.IsSuccessStatusCode)
                 {
                     userDTO.BasketId = int.Parse(await result.Content.ReadAsStringAsync());
@@ -204,6 +205,7 @@
             Ticket.Id = int.Parse(await TicketService.CreateTicket(Ticket));
             await JsRuntime.InvokeVoidAsync("ShowSwal", "success", "Task completed successfully!");
             await JsRuntime.InvokeVoidAsync("HideModal");
+            NavigationManager.NavigateTo($"/ticket/edit/{Ticket.Id}");
         }
         else
         {

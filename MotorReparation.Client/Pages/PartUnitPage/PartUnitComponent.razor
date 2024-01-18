@@ -7,7 +7,7 @@
 
 <div class="card my-3">
     <div class="card-body">
-        <EditForm Model="PartUnit" OnSubmit="()=>HandlePartUnitUpsert(TicketId)">
+        <EditForm Model="PartUnit" OnSubmit="()=>HandlePartUnitUpsert(Ticket.Id)">
             <div class="form-group">
                 <label>PartId</label>
                 <InputSelect class="form-control" @bind-Value="PartUnit.PartId">
@@ -67,8 +67,6 @@
 
 @code {
     [Parameter]
-    public int TicketId { get; set; }
-    [Parameter]
     public Ticket Ticket { get; set; } = new Ticket();
     [Parameter]
     public EventCallback<Ticket> TicketChanged { get; set; }
@@ -94,7 +92,7 @@
             PartUnit.CreatedBy = userDTO.Id;
             PartUnit.LastModifiedDate = DateTime.UtcNow;
             PartUnit.LastModifiedBy = userDTO.Id;
-            PartUnit.TicketId = TicketId;
+            PartUnit.TicketId = Ticket.Id;
             var result = await HttpClient.PostAsJsonAsync($"api/PartUnit", PartUnit);
             if (result != null)
             {
