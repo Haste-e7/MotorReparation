@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using MotorReparation.Application.Contracts.Persistence;
 using MotorReparation.Application.Contracts.Services;
 using MotorReparation.Domain;
-using MotorReparation.Models.Commons;
 
 namespace MotorReparation.API.Controllers
 {
@@ -13,10 +13,12 @@ namespace MotorReparation.API.Controllers
         private readonly IBasketService _basketService;
         private readonly IBasketRepository _basketRepository;
         private readonly ITicketRepository _ticketRepository;
-        public BasketController(IBasketService basketService, IBasketRepository basketRepository, ITicketRepository ticketRepository)
+        private readonly UserManager<AppUser> _userManager; 
+        public BasketController(IBasketService basketService, IBasketRepository basketRepository, ITicketRepository ticketRepository, UserManager<AppUser> userManager)
         {
             _basketService = basketService;
             _basketRepository = basketRepository;
+            _userManager = userManager;
             _ticketRepository  = ticketRepository;
         }
 
@@ -52,7 +54,24 @@ namespace MotorReparation.API.Controllers
             {
                 return NotFound();
             }
-            return Ok(result);
+            var user = await _userManager.FindByIdAsync(basket.CustomerId);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{basket.CustomerId}'.");
+            }
+            user.BasketId = basket.Id;
+            await _userManager.UpdateAsync(user);
+            return Ok(basket.Id);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBasket(int id)
+        {
+            var b = await _basketRepository.GetByIdAsync(id);
+            if (b != null) 
+            {
+                await _basketRepository.DeleteAsync(b);
+            }
+            return Ok();
         }
     }
 }
